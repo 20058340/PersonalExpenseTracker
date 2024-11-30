@@ -183,7 +183,7 @@ document.getElementById('set-budget-form').addEventListener('submit', function(e
     .catch(error => console.error("Error setting budget:", error));
 });
 
-loadBudgetCategories();
+
 
 // Load Budgets into the Summary Section
 function updateBudgetStatus() {
