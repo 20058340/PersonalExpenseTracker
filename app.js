@@ -1,3 +1,5 @@
+const { response } = require("express");
+
 // Base URL for API requests
 const baseURL = "http://localhost:3000";
 
@@ -188,7 +190,13 @@ function deleteBudget(id) {
     fetch(`${baseURL}/budgets/${id}`, {
         method: 'DELETE'
     })
-    
+    .then(response => response.json())
+    .then(data => {
+        console.log("Budgets deleted:", data);
+        loadBudgets();
+    })
+    .catch(error => console.error("Error deleting budgets:", error));
+
 }
 
 
