@@ -111,8 +111,9 @@ function editExpense(id) {
                     loadExpenses(); // Reload the expenses table
                     updateBudgetStatus(); // Update budget status after updating expense
                     // Reset the form and button text
-                    event.target.reset();
-                    submitButton.textContent = "Add Expense"; // Reset button text
+                    form.reset();
+                    submitButton.textContent = "Add Expense";
+                    form.onsubmit = addExpense; 
                 })
                 .catch(error => console.error("Error updating expense:", error));
             };
