@@ -55,7 +55,8 @@ db.serialize(() => {
 
 // Get all categories
 app.get('/categories', (req, res) => {
-    db.all('SELECT * FROM categories', [], (err, rows) => {
+    const sql = 'SELECT * FROM categories';
+    db.all(sql,[], (err, rows) => {
         if (err) {
             res.status(500).json({ error: 'Failed to retrieve categories.' });
         } else {
