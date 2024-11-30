@@ -117,8 +117,8 @@ function editExpense(id) {
                 .catch(error => console.error("Error updating expense:", error));
             };
         })
-        
-        }
+        .catch(error => console.error("Error fetching expenses  data "));
+    }
         
       
 // Delete Expense
