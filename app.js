@@ -8,6 +8,8 @@ function loadCategories() {
     fetch(`${baseURL}/categories`)
         .then(response => response.json())
         .then(data => {
+
+            console.log("categories loaded:", data.categories);
             const expenseCategoryDropdown = document.getElementById("expense-category");
             const budgetCategoryDropdown = document.getElementById("budget-category");
 
@@ -15,12 +17,13 @@ function loadCategories() {
             expenseCategoryDropdown.innerHTML = "";
             budgetCategoryDropdown.innerHTML = ""; 
 
-            console.log("Categories loaded:", data.categories);
+            
 
             data.categories.forEach(category => {
                 const option = document.createElement("option");
                 option.value = category.id;
                 option.textContent = category.name;
+                
                 expenseCategoryDropdown.appendChild(option.cloneNode(true));
                 budgetCategoryDropdown.appendChild(option);
             });
