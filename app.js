@@ -182,6 +182,15 @@ document.getElementById('set-budget-form').addEventListener('submit', function(e
     .catch(error => console.error("Error setting budget:", error));
 });
 
+//delete budgets
+
+function deleteBudget(id) {
+    fetch(`${baseURL}/budgets/${id}`, {
+        method: 'DELETE'
+    })
+    
+}
+
 
 
 // Load Budgets into the Summary Section
