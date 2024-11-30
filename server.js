@@ -58,10 +58,11 @@ app.get('/categories', (req, res) => {
     const sql = 'SELECT * FROM categories';
     db.all(sql,[], (err, rows) => {
         if (err) {
-            res.status(500).json({ error: 'Failed to retrieve categories.' });
-        } else {
-            res.json({ categories: rows });
-        }
+            console.error("Error fetching categories:", err.message);
+            return res.status(500).json({ error: 'Failed to retrieve categories.' });
+        } 
+        res.json({categories: rows});
+        
     });
 });
 
