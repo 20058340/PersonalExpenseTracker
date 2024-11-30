@@ -84,8 +84,10 @@ function editExpense(id) {
             submitButton.textContent = "Update Expense";
 
             // Modify the form submission to update the expense
-            document.getElementById('add-expense-form').addEventListener('submit', function updateExpenseForm(event) {
-                event.preventDefault(); // Prevent default form submission
+            const form = document.getElementById('add-expenses-form');
+            form.onsubmitt = function (event) {
+                event.preventDefault();
+            }
 
                 // Get the updated values from the form
                 const updatedAmount = document.getElementById('expense-amount').value;
@@ -114,10 +116,10 @@ function editExpense(id) {
                     submitButton.textContent = "Add Expense"; // Reset button text
                 })
                 .catch(error => console.error("Error updating expense:", error));
-            });
+            };
         })
         .catch(error => console.error("Error fetching expense data:", error));
-}
+    }
 
 // Delete Expense
 function deleteExpense(id) {
