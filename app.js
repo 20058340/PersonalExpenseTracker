@@ -87,7 +87,6 @@ function editExpense(id) {
             const form = document.getElementById('add-expenses-form');
             form.onsubmitt = function (event) {
                 event.preventDefault();
-            }
 
                 // Get the updated values from the form
                 const updatedAmount = document.getElementById('expense-amount').value;
@@ -116,7 +115,9 @@ function editExpense(id) {
                     submitButton.textContent = "Add Expense"; // Reset button text
                 })
                 .catch(error => console.error("Error updating expense:", error));
-            });
+            };
+        })
+        
         }
         
       
