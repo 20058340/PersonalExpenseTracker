@@ -177,8 +177,7 @@ document.getElementById('set-budget-form').addEventListener('submit', function(e
     .then(response => response.json())
     .then(data => {
         console.log("Budget set:", data);
-        updateBudgetStatus(); // Reload budget status after setting budget
-        event.target.reset(); // Reset form
+        loadBudgets();
     })
     .catch(error => console.error("Error setting budget:", error));
 });
