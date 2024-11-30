@@ -157,6 +157,8 @@ function loadBudgetCategories() {
         .catch(error => console.error("Error loading categories for budget:", error));
 }
 
+
+
 // Set or Update Budget
 document.getElementById('set-budget-form').addEventListener('submit', function(event) {
     event.preventDefault();
@@ -215,3 +217,4 @@ function updateBudgetStatus() {
 loadCategories();
 loadExpenses();
 updateBudgetStatus();
+loadBudgetCategories();
