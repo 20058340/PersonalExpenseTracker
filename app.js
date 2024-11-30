@@ -9,7 +9,11 @@ function loadCategories() {
         .then(response => response.json())
         .then(data => {
             const expenseCategoryDropdown = document.getElementById("expense-category");
-            expenseCategoryDropdown.innerHTML = ""; 
+            const budgetCategoryDropdown = document.getElementById("budget-category");
+
+
+            expenseCategoryDropdown.innerHTML = "";
+            budgetCategoryDropdown.innerHTML = ""; 
 
             data.categories.forEach(category => {
                 const option = document.createElement("option");
