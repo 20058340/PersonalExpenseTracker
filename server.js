@@ -114,8 +114,9 @@ app.post('/expenses', (req, res) => {
 
 // Update an expense
 app.put('/expenses/:id', (req, res) => {
-    const { amount, date, category_id, description } = req.body;
     const { id } = req.params;
+    const { amount, date, category_id, description } = req.body;
+    
 
     const sql = `
         UPDATE expenses
@@ -124,7 +125,7 @@ app.put('/expenses/:id', (req, res) => {
 
     db.run(sql, [amount, date, category_id, description, id], function(err) {
         if (err) {
-            return res.status(500).json({ error: err.message });
+            return res.status(500).json({ error: "Failed to update expenses" });
         }
         res.json({ message: 'Expense updated successfully', id });
     });
