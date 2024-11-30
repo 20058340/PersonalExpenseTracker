@@ -15,6 +15,8 @@ function loadCategories() {
             expenseCategoryDropdown.innerHTML = "";
             budgetCategoryDropdown.innerHTML = ""; 
 
+            console.log("Categories loaded:", data.categories);
+
             data.categories.forEach(category => {
                 const option = document.createElement("option");
                 option.value = category.id;
