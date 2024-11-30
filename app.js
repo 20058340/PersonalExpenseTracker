@@ -240,4 +240,4 @@ function updateBudgetStatus() {
 loadCategories();
 loadExpenses();
 updateBudgetStatus();
-
+loadBudgetCategories();
