@@ -1,13 +1,13 @@
 // Base URL for API requests
 const baseURL = "http://localhost:3000";
 
-// Load Categories into Dropdowns
+// Load Categories into Dropdowns 
 function loadCategories() {
     fetch(`${baseURL}/categories`)
         .then(response => response.json())
         .then(data => {
             const expenseCategoryDropdown = document.getElementById("expense-category");
-            expenseCategoryDropdown.innerHTML = ""; // Clear existing options
+            expenseCategoryDropdown.innerHTML = ""; 
 
             data.categories.forEach(category => {
                 const option = document.createElement("option");
@@ -36,9 +36,8 @@ document.getElementById('add-expense-form').addEventListener('submit', function 
         .then(response => response.json())
         .then(data => {
             console.log("Expense added:", data);
-            loadExpenses(); // Reload expenses
-            updateBudgetStatus(); // Update budget status after adding expense
-            event.target.reset(); // Clear the form
+            loadExpenses(); 
+            updateBudgetStatus(); 
         })
         .catch(error => console.error("Error adding expense:", error));
 });
