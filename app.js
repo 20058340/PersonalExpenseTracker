@@ -21,7 +21,8 @@ function loadCategories() {
                 const option = document.createElement("option");
                 option.value = category.id;
                 option.textContent = category.name;
-                expenseCategoryDropdown.appendChild(option);
+                expenseCategoryDropdown.appendChild(option.cloneNode(true));
+                budgetCategoryDropdown.appendChild(option);
             });
         })
         .catch(error => console.error("Error loading categories:", error));
