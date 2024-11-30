@@ -206,7 +206,7 @@ app.post('/budgets', (req, res) => {
             console.error("Error setting budgets:", err.message);
             return res.status(500).json({ error: "Failed to set or update the budget."});
         }
-        res.status(201).json({ message: 'Budget set or updated successfully.' });
+        res.json({ message: "Budget set or updated successfully.", id: this.lastID, category_id, limit_amount });
     });
 });
 
