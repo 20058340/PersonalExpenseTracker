@@ -199,14 +199,7 @@ app.post('/budgets', (req, res) => {
     const { category_id, limit_amount } = req.body;
     const sql= `INSERT OR REPLACE INTO budgets (category_id, limit_amount)
     values(?, ?)`;
-    if (!category_id || !limit_amount) {
-        return res.status(400).json({ error: 'Category ID and limit amount are required.' });
-    }
-
-    const sql = `
-        INSERT INTO budgets (category_id, limit_amount)
-        VALUES (?, ?)
-        ON CONFLICT(category_id) DO UPDATE SET limit_amount = excluded.limit_amount`;
+    
 
     db.run(sql, [category_id, limit_amount], function(err) {
         if (err) {
