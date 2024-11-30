@@ -116,11 +116,10 @@ function editExpense(id) {
                     submitButton.textContent = "Add Expense"; // Reset button text
                 })
                 .catch(error => console.error("Error updating expense:", error));
-            };
-        })
-        .catch(error => console.error("Error fetching expense data:", error));
-    }
-
+            });
+        }
+        
+      
 // Delete Expense
 function deleteExpense(id) {
     if (confirm("Are you sure you want to delete this expense?")) {
