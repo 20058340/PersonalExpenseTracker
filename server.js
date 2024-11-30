@@ -197,6 +197,8 @@ app.get('/budgets', (req, res) => {
 // Set or Update a Budget
 app.post('/budgets', (req, res) => {
     const { category_id, limit_amount } = req.body;
+    const sql= `INSERT OR REPLACE INTO budgets (category_id, limit_amount)
+    values(?, ?)`;
     if (!category_id || !limit_amount) {
         return res.status(400).json({ error: 'Category ID and limit amount are required.' });
     }
