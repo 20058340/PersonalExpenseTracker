@@ -203,7 +203,8 @@ app.post('/budgets', (req, res) => {
 
     db.run(sql, [category_id, limit_amount], function(err) {
         if (err) {
-            return res.status(500).json({ error: err.message });
+            console.error("Error setting budgets:", err.message);
+            return res.status(500).json({ error: "Failed to set or update the budget."});
         }
         res.status(201).json({ message: 'Budget set or updated successfully.' });
     });
