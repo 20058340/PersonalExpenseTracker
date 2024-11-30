@@ -85,7 +85,7 @@ function editExpense(id) {
 
             // Modify the form submission to update the expense
             const form = document.getElementById('add-expenses-form');
-            form.onsubmitt = function (event) {
+            form.onsubmit = function (event) {
                 event.preventDefault();
 
                 // Get the updated values from the form
