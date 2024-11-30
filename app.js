@@ -207,9 +207,9 @@ function updateBudgetStatus() {
         .then(response => response.json())
         .then(data => {
             const budgetSummary = document.getElementById("budget-summary");
-            budgetSummary.innerHTML = ""; // Clear previous content
+            budgetSummary.innerHTML = ""; 
 
-            // Loop through each budget and display the budget status
+            
             data.budgets.forEach(budget => {
                 const div = document.createElement("div");
                 div.classList.add("budget-status");
@@ -219,8 +219,8 @@ function updateBudgetStatus() {
                 div.innerHTML = `
                     <strong>${budget.category_name}</strong>: 
                     Budget Limit: ${budget.limit_amount} | 
-                    Total Spent: ${budget.total_spent} | 
-                    <span class="${statusClass}">${budget.status}</span>
+                    Total Spent: ${budget.total_spent || 0} | 
+                    <button onclick ="deleteBudget(${budget.id})">Delete</button>
                 `;
 
                 budgetSummary.appendChild(div);
