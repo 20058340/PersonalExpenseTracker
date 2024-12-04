@@ -211,39 +211,37 @@ function deleteBudget(id) {
 
 }
 
-// Load budgets and display in budget summary
+// Load budgets and display in budget summary 
 
-function loadBudgets()  {
-    fetch(`${baseURL}/budgets`)
-    .then(response =>response.json())
-    .then(data=> {
-        const budgetSummary = document.getElementById("budget-summary");
-        budgetSummary.innerHTML = "";
+//function loadBudgets()  {
+    //fetch(`${baseURL}/budgets`)
+    //.then(response =>response.json())
+    //.then(data=> {
+        //const budgetSummary = document.getElementById("budget-summary");
+        //budgetSummary.innerHTML = "";
     
 
-    data.budgets.forEach(budget =>  {
-        const div = document.createElement("div");
-        div.classList.add("budget-item");
+    //data.budgets.forEach(budget =>  {
+        //const div = document.createElement("div");
+        d//iv.classList.add("budget-item");
 
-        const isOverBudget = budget.total_spent > budget.limit_amount;
-        const statusClass = isOverBudget ? "over-budget" : " within-budget " ;
+        //const isOverBudget = budget.total_spent > budget.limit_amount;
+        //const statusClass = isOverBudget ? "over-budget" : " within-budget " ;
 
-        div.innerHTML = `
-        <strong>${ budget.category_name}</strong>:
-        Limit: ${budget.limit_amount} |
-        Spent: ${budget.total_spent || 0} |
-        <span class= "${statusClass}">${isOverBudget ? "Over Budget" : "Within Budets"}</span>`;
+        //div.innerHTML = `
+        //<strong>${ budget.category_name}</strong>:
+        //Limit: ${budget.limit_amount} |
+        //Spent: ${budget.total_spent || 0} |
+        //<span class= "${statusClass}">${isOverBudget ? "Over Budget" : "Within Budets"}</span>`;
 
-        budgetSummary.appendChild(div);
+        //budgetSummary.appendChild(div);
 
-        });
-    })
+        //});
+    //})
 
-    .catch(error => console.error("Error loading budgets:", error))
+    //.catch(error => console.error("Error loading budgets:", error))
 
-}
-
-
+//}
 
 // Load Budgets into the Summary Section
 function updateBudgetStatus() {
