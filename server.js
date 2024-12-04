@@ -204,34 +204,6 @@ app.get('/budgets', (req, res) => {
     });
 });
 
-//Set Budget Form Submission
-
-document.getElementById('set-budget-form').addEventListener('submit', function (event) {
-    event.preventDefault();
-
-    const category = document.getElementById('budget-category').value;
-    const limit = document.getElementById('budget-limit').value;
-
-    fetch(`${baseURL}/budgets`, {
-        method: 'POST',headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ category_id: category, limit_amount: limit })
-
-    })
-
-    .then(response => response.json())
-    .then(data => {
-        console.log("Budget set:", data);
-        loadBudgets();
-        event.target.reset(); 
-    })
-    .catch(error => console.error("Error setting budget:", error));
-});
-
-
-
-
-
-
 
 // Set or Update a Budget
 app.post('/budgets', (req, res) => {
