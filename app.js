@@ -221,7 +221,7 @@ function loadBudgets()  {
         budgetSummary.innerHTML = "";
     })
 
-    data,budgets.forEach(budget => 1 {
+    data.budgets.forEach(budget =>  {
         const div = document.createElement("div");
         div.classList.add("budget-item");
     })
