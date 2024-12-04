@@ -210,8 +210,9 @@ app.get('/budgets', (req, res) => {
 // Set or Update a Budget
 app.post('/budgets', (req, res) => {
     const { category_id, limit_amount } = req.body;
-    const sql= `INSERT OR REPLACE INTO budgets (category_id, limit_amount)
-    values(?, ?)`;
+    const sql= `INSERT INTO budgets (category_id, limit_amount)
+    values(?, ?)
+    ON CONFLICT(category_id) DO UPDATE SET limit_amount = excluded.limit_amount`;
     
 
     db.run(sql, [category_id, limit_amount], function(err) {
@@ -219,7 +220,7 @@ app.post('/budgets', (req, res) => {
             console.error("Error setting budgets:", err.message);
             return res.status(500).json({ error: "Failed to set or update the budget."});
         }
-        res.json({ message: "Budget set or updated successfully.", id: this.lastID, category_id, limit_amount });
+        res.json({ message: "Budget set or updated successfully.",category_id,limit_amount });
     });
 });
 
