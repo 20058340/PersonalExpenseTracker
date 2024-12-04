@@ -19,10 +19,7 @@ function loadCategories() {
             expenseCategoryDropdown.innerHTML = "";
             budgetCategoryDropdown.innerHTML = ""; 
 
-            console.log("categories loaded:", data.categories);
-
             
-
             data.categories.forEach(category => {
                 const option = document.createElement("option");
                 option.value = category.id;
@@ -31,6 +28,8 @@ function loadCategories() {
                 expenseCategoryDropdown.appendChild(option.cloneNode(true));
                 budgetCategoryDropdown.appendChild(option);
             });
+
+            console.log("categories loaded:", data.categories);
         })
         .catch(error => console.error("Error loading categories:", error));
 }
@@ -197,6 +196,7 @@ document.getElementById('set-budget-form').addEventListener('submit', function(e
     })
     .catch(error => console.error("Error setting budget:", error));
 });
+
 
 //delete budgets
 
