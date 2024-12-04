@@ -189,3 +189,7 @@ button:hover {
     border: 1px solid #ccc;
     border-radius: 5px;
 }
+.budget-item .over-budget {
+    color: red;
+    font-weight: bold;
+}
