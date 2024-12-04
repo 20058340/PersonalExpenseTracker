@@ -193,3 +193,7 @@ button:hover {
     color: red;
     font-weight: bold;
 }
+.budget-item .within-budget {
+    color: green;
+    font-weight: bold;
+}
