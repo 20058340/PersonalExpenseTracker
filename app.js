@@ -224,12 +224,14 @@ function loadBudgets()  {
     
 
     data.budgets.forEach(budget =>  {
-        const div = document.createElement("div");
-        div.classList.add("budget-item");
+        
 
         const isOverBudget = budget.total_spent > budget.limit_amount;
         const statusText = isOverBudget ? "Over Budget" : "Within Budget";
         const statusClass = isOverBudget ? "over-budget" : " within-budget " ;
+
+        const div = document.createElement("div");
+        div.classList.add("budget-item");
 
         div.innerHTML = `
         <strong>${ budget.category_name}</strong>:
