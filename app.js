@@ -233,7 +233,11 @@ function loadBudgets()  {
         Limit: ${budget.limit_amount} |
         Spent: ${budget.total_spent || 0} |
         <span class= "${statusClass}">${isOverBudget ? "Over Budget" : "Within Budets"}</span>`;
+
+        budgetSummary.appendChild(div);
+
     })
+    
 }
 
 
