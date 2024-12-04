@@ -171,6 +171,7 @@ app.get('/budgets', (req, res) => {
             console.error("Error fetching budgets: ", err.message); // Log error message
             return res.status(500).json({ error: 'Failed to retrieve budgets.' });
         }
+        
 
         // Now, calculate the total expenses for each category
         budgets.forEach(budget => {
@@ -193,7 +194,7 @@ app.get('/budgets', (req, res) => {
         });
 
         // Return the budgets with total expenses and status
-        res.json({ budgets });
+        res.json({ budgets: rows });
     });
 });
 
