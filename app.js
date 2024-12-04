@@ -1,5 +1,7 @@
 //const { response } = require("express");
 
+const { response } = require("express");
+
 // Base URL for API requests
 const baseURL = "http://localhost:3000";
 
@@ -207,6 +209,17 @@ function deleteBudget(id) {
     })
     .catch(error => console.error("Error deleting budgets:", error));
 
+}
+
+// Load budgets and display in budget summary
+
+function loadBudgets()  {
+    fetch(`${baseURL}/budgets`)
+    .then(response =>response.json())
+    .then(data=> {
+        const budgetSummary = document.getElementById("budget-summary");
+        budgetSummary.innerHTML = "";
+    })
 }
 
 
