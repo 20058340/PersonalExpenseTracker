@@ -156,7 +156,11 @@ app.delete('/expenses/:id', (req, res) => {
 
 app.get('/budgets', (req, res) => {
     const sql = `
-        SELECT b.id, b.category_id, b.limit_amount, c.name As category_name,
+        SELECT 
+        b.id, 
+        b.category_id, 
+        b.limit_amount, 
+        c.name As category_name,
         IFNULL(SUM(e.amount), 0) AS total_spent  -- Calculate total spent for each category
 
     FROM budgets b
