@@ -210,6 +210,8 @@ app.delete('/budgets/:id', (req, res) => {
     const { id } = req.params;
     const sql = 'DELETE FROM budgets WHERE id = ?';
     db.run(sql, [id], function (err) {
+        if (err) {
+            res.status(500).json({ error: 'Failed to delete budget.' });
 }
 
 // ==================
