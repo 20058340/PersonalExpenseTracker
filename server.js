@@ -180,24 +180,24 @@ app.get('/budgets', (req, res) => {
         
 
         // Now, calculate the total expenses for each category
-        budgets.forEach(budget => {
-            const categoryId = budget.category_id;
-            const expenseSql = `
-                SELECT SUM(amount) AS total_spent
-                FROM expenses
-                WHERE category_id = ?`;
+        //budgets.forEach(budget => {
+         //   const categoryId = budget.category_id;
+        //    const expenseSql = `
+          //      SELECT SUM(amount) AS total_spent
+            //    FROM expenses
+              //  WHERE category_id = ?`;
 
-            db.get(expenseSql, [categoryId], (err, row) => {
-                if (err) {
-                    console.error("Error fetching expenses for category " + categoryId + ": ", err.message);
-                    return res.status(500).json({ error: 'Failed to calculate total expenses.' });
-                }
+            //db.get(expenseSql, [categoryId], (err, row) => {
+              //  if (err) {
+                //    console.error("Error fetching expenses for category " + categoryId + ": ", err.message);
+                  //  return res.status(500).json({ error: 'Failed to calculate total expenses.' });
+                //}
 
                 // Assign total spent to the budget
-                budget.total_spent = row.total_spent || 0; // If no expenses, set to 0
-                budget.status = budget.total_spent > budget.limit_amount ? 'Over Budget' : 'Within Budget';
-            });
-        });
+                //budget.total_spent = row.total_spent || 0; // If no expenses, set to 0
+                //budget.status = budget.total_spent > budget.limit_amount ? 'Over Budget' : 'Within Budget';
+           // });
+        //});
 
         // Return the budgets with total expenses and status
         res.json({ budgets: rows });
