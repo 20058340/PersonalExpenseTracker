@@ -237,7 +237,9 @@ function loadBudgets()  {
         budgetSummary.appendChild(div);
 
     })
-    
+
+    .catch(error => console.error("Error loading budgets:", error))
+
 }
 
 
