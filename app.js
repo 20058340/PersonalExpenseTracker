@@ -271,6 +271,9 @@ function updateBudgetStatus() {
         .catch(error => console.error("Error fetching budget status:", error));
 }
 
+document.getElementById('set-budget-form').addEventListener('submit', function (event) {
+    event.preventDefault();
+
 // Initialize Data on Page Load
 loadCategories();
 loadExpenses();
