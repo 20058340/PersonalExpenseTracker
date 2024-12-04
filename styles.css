@@ -183,3 +183,9 @@ button:hover {
     color: red;
     font-weight: bold;
 }
+.budget-item {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
