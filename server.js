@@ -212,7 +212,13 @@ app.delete('/budgets/:id', (req, res) => {
     db.run(sql, [id], function (err) {
         if (err) {
             res.status(500).json({ error: 'Failed to delete budget.' });
-}
+        } else if (this.changes === 0) {
+            res.status(404).json({ error: 'Budget not found.' });
+        } else {
+            res.json({ message: 'Budget deleted successfully.' });
+        }
+    });
+});
 
 // ==================
 // Start the Server
