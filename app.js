@@ -215,7 +215,7 @@ function deleteBudget(id) {
 
 // Load budgets and display in budget summary 
 
-function loadBudgets()  {
+function loadBudgets() {
     fetch(`${baseURL}/budgets`)
     .then(response =>response.json())
     .then(data=> {
