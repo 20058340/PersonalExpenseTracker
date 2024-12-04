@@ -212,6 +212,23 @@ document.getElementById('set-budget-form').addEventListener('submit', function (
     const category = document.getElementById('budget-category').value;
     const limit = document.getElementById('budget-limit').value;
 
+    fetch(`${baseURL}/budgets`, {
+        method: 'POST',headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ category_id: category, limit_amount: limit })
+
+    })
+
+    .then(response => response.json())
+    .then(data => {
+        console.log("Budget set:", data);
+        loadBudgets();
+        event.target.reset(); 
+    })
+});
+
+
+
+
 
 
 
