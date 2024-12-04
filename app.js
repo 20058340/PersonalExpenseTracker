@@ -198,8 +198,9 @@ function deleteBudget(id) {
             } else {
                 console.error("Error deleting budget.");
             }
-
-            
+        })
+        .catch(error => console.error("Error deleting budget:", error));
+     
     }
 }
 
