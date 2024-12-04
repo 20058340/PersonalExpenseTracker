@@ -52,7 +52,8 @@ document.getElementById('add-expense-form').addEventListener('submit', function 
         .then(data => {
             console.log("Expense added:", data);
             loadExpenses(); 
-            updateBudgetStatus(); 
+            updateBudgetStatus();
+            event.target.reset(); 
         })
         .catch(error => console.error("Error adding expense:", error));
 });
