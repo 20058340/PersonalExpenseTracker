@@ -224,6 +224,7 @@ document.getElementById('set-budget-form').addEventListener('submit', function (
         loadBudgets();
         event.target.reset(); 
     })
+    .catch(error => console.error("Error setting budget:", error));
 });
 
 
