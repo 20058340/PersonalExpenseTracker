@@ -220,6 +220,11 @@ function loadBudgets()  {
         const budgetSummary = document.getElementById("budget-summary");
         budgetSummary.innerHTML = "";
     })
+
+    data,budgets.forEach(budget => 1 {
+        const div = document.createElement("div");
+        div.classList.add("budget-item");
+    })
 }
 
 
