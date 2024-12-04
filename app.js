@@ -227,6 +227,12 @@ function loadBudgets()  {
 
         const isOverBudget = budget.total_spent > budget.limit_amount;
         const statusClass = isOverBudget ? "over-budget" : " within-budget " ;
+
+        div.innerHTML = `
+        <strong>${ budget.category_name}</strong>:
+        Limit: ${budget.limit_amount} |
+        Spent: ${budget.total_spent || 0} |
+        <span class= "${statusClass}">${isOverBudget ? "Over Budget" : "Within Budets"}</span>`;
     })
 }
 
