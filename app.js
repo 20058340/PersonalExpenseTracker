@@ -283,6 +283,13 @@ document.getElementById('set-budget-form').addEventListener('submit', function (
         body: JSON.stringify({ category_id: category, limit_amount: limit })
     })
 
+    .then(response => response.json())
+        .then(data => {
+            console.log("Budget set:", data);
+            loadBudgets(); // Refresh the budget list
+            event.target.reset(); // Clear the form
+        })
+
 // Initialize Data on Page Load
 loadCategories();
 loadExpenses();
