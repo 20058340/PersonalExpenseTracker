@@ -175,7 +175,7 @@ function loadBudgets() {
         <strong>${ budget.category_name}</strong>:
         Limit: ${budget.limit_amount} |
         Spent: ${budget.total_spent || 0} |
-        <span class= "${statusClass}">${isOverBudget ? "Over Budget" : "Within Budets"}</span>`;
+        <span class= "${statusClass}">${isOverBudget ? "Over Budget" : "Within Budgets"}</span>`;
 
         budgetSummary.appendChild(div);
 
