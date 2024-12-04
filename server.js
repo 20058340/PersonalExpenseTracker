@@ -204,6 +204,14 @@ app.get('/budgets', (req, res) => {
     });
 });
 
+//Set Budget Form Submission
+
+document.getElementById('set-budget-form').addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    const category = document.getElementById('budget-category').value;
+    const limit = document.getElementById('budget-limit').value;
+
 
 
 
