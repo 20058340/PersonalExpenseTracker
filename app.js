@@ -290,6 +290,11 @@ document.getElementById('set-budget-form').addEventListener('submit', function (
             event.target.reset(); // Clear the form
         })
 
+        .catch(error => {
+            console.error("Error setting budget:", error);
+        });
+});
+
 // Initialize Data on Page Load
 loadCategories();
 loadExpenses();
