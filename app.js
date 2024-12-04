@@ -102,7 +102,7 @@ function editExpense(id) {
 
             document.getElementById('add-expense-form').onsubmit = function (event) {
                 event.preventDefault();
-                
+
                 // Get the updated values from the form
                 const updatedAmount = document.getElementById('expense-amount').value;
                 const updatedDate = document.getElementById('expense-date').value;
@@ -120,15 +120,14 @@ function editExpense(id) {
                         description: updatedDescription
                     })
                 })
+            
                 .then(response => response.json())
                 .then(data => {
                     console.log("Expense updated:", data);
-                    loadExpenses(); // Reload the expenses table
-                    updateBudgetStatus(); // Update budget status after updating expense
-                    // Reset the form and button text
-                    form.reset();
+                    loadExpenses(); 
+                    updateBudgetStatus(); 
                     submitButton.textContent = "Add Expense";
-                    form.onsubmit = addExpense; 
+                    event.target.reset();
                 })
                 .catch(error => console.error("Error updating expense:", error));
             };
