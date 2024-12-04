@@ -143,73 +143,14 @@ function deleteExpense(id) {
             .then(response => {
                 if (response.ok) {
                     console.log("Expense deleted successfully.");
-                    loadExpenses(); // Reload expenses after deletion
-                    updateBudgetStatus(); // Update budget status after deletion
+                    loadExpenses(); 
+                    updateBudgetStatus(); 
                 } else {
                     console.error("Error deleting expense.");
                 }
             })
             .catch(error => console.error("Error deleting expense:", error));
     }
-}
-
-// Load Budget Categories into Dropdown
-function loadBudgetCategories() {
-    fetch(`${baseURL}/categories`)
-        .then(response => response.json())
-        .then(data => {
-            const budgetCategoryDropdown = document.getElementById("budget-category");
-            budgetCategoryDropdown.innerHTML = ""; // Clear existing options
-
-            data.categories.forEach(category => {
-                const option = document.createElement("option");
-                option.value = category.id;
-                option.textContent = category.name;
-                budgetCategoryDropdown.appendChild(option);
-            });
-        })
-        .catch(error => console.error("Error loading categories for budget:", error));
-}
-
-
-
-// Set or Update Budget
-document.getElementById('set-budget-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    const category = document.getElementById('budget-category').value;
-    const limit = document.getElementById('budget-limit').value;
-
-    fetch(`${baseURL}/budgets`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            category_id: category,
-            limit_amount: limit
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log("Budget set:", data);
-        loadBudgets();
-    })
-    .catch(error => console.error("Error setting budget:", error));
-});
-
-
-//delete budgets
-
-function deleteBudget(id) {
-    fetch(`${baseURL}/budgets/${id}`, {
-        method: 'DELETE'
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log("Budgets deleted:", data);
-        loadBudgets();
-    })
-    .catch(error => console.error("Error deleting budgets:", error));
-
 }
 
 // Load budgets and display in budget summary 
@@ -223,8 +164,6 @@ function loadBudgets() {
     
 
     data.budgets.forEach(budget =>  {
-        
-
         const isOverBudget = budget.total_spent > budget.limit_amount;
         const statusText = isOverBudget ? "Over Budget" : "Within Budget";
         const statusClass = isOverBudget ? "over-budget" : " within-budget " ;
@@ -247,57 +186,9 @@ function loadBudgets() {
 
 }
 
-// Load Budgets into the Summary Section
-function updateBudgetStatus() {
-    fetch(`${baseURL}/budgets`)
-        .then(response => response.json())
-        .then(data => {
-            const budgetSummary = document.getElementById("budget-summary");
-            budgetSummary.innerHTML = ""; 
 
-            
-            data.budgets.forEach(budget => {
-                const div = document.createElement("div");
-                div.classList.add("budget-status");
 
-                const statusClass = budget.status === "Over Budget" ? "over-budget" : "within-budget";
 
-                div.innerHTML = `
-                    <strong>${budget.category_name}</strong>: 
-                    Budget Limit: ${budget.limit_amount} | 
-                    Total Spent: ${budget.total_spent || 0} | 
-                    <button onclick ="deleteBudget(${budget.id})">Delete</button>
-                `;
-
-                budgetSummary.appendChild(div);
-            });
-        })
-        .catch(error => console.error("Error fetching budget status:", error));
-}
-
-document.getElementById('set-budget-form').addEventListener('submit', function (event) {
-    event.preventDefault();
-
-    const category = document.getElementById('budget-category').value;
-    const limit = document.getElementById('budget-limit').value;
-
-    fetch(`${baseURL}/budgets`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ category_id: category, limit_amount: limit })
-    })
-
-    .then(response => response.json())
-        .then(data => {
-            console.log("Budget set:", data);
-            loadBudgets(); // Refresh the budget list
-            event.target.reset(); // Clear the form
-        })
-
-        .catch(error => {
-            console.error("Error setting budget:", error);
-        });
-});
 
 // Initialize Data on Page Load
 loadCategories();
