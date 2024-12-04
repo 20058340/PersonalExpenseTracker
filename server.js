@@ -91,8 +91,10 @@ app.get('/expenses', (req, res) => {
         JOIN categories c ON e.category_id = c.id`;
     db.all(sql, [], (err, rows) => {
         if (err) {
+            console.error("Error fetching budgets:", err.message);
             res.status(500).json({ error: 'Failed to retrieve expenses.' });
         } else {
+            console.log("Budgets fetched:", rows);
             res.json({ expenses: rows });
         }
     });
