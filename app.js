@@ -219,7 +219,7 @@ function loadBudgets()  {
     .then(data=> {
         const budgetSummary = document.getElementById("budget-summary");
         budgetSummary.innerHTML = "";
-    })
+    
 
     data.budgets.forEach(budget =>  {
         const div = document.createElement("div");
@@ -236,6 +236,7 @@ function loadBudgets()  {
 
         budgetSummary.appendChild(div);
 
+        });
     })
 
     .catch(error => console.error("Error loading budgets:", error))
