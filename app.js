@@ -209,5 +209,4 @@ function deleteBudget(id) {
 // Initialize Data on Page Load
 loadCategories();
 loadExpenses();
-updateBudgetStatus();
-loadBudgetCategories();
+loadBudgets();
