@@ -180,7 +180,7 @@ app.get('/budgets', (req, res) => {
             budget.status = budget.total_spent > budget.limit_amount ? 'Over Budget' : 'Within Budget';
         })
 
-        // Return the budgets with total expenses and status
+        
         res.json({ budgets: rows });
     });
 });
@@ -203,6 +203,14 @@ app.post('/budgets', (req, res) => {
     });
 });
 
+
+// delete a budget
+
+app.delete('/budgets/:id', (req, res) => {
+    const { id } = req.params;
+    const sql = 'DELETE FROM budgets WHERE id = ?';
+    db.run(sql, [id], function (err) {
+}
 
 // ==================
 // Start the Server
