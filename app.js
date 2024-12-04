@@ -11,13 +11,15 @@ function loadCategories() {
         .then(response => response.json())
         .then(data => {
 
-            console.log("categories loaded:", data.categories);
+            
             const expenseCategoryDropdown = document.getElementById("expense-category");
             const budgetCategoryDropdown = document.getElementById("budget-category");
 
 
             expenseCategoryDropdown.innerHTML = "";
             budgetCategoryDropdown.innerHTML = ""; 
+
+            console.log("categories loaded:", data.categories);
 
             
 
