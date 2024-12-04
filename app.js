@@ -224,6 +224,9 @@ function loadBudgets()  {
     data.budgets.forEach(budget =>  {
         const div = document.createElement("div");
         div.classList.add("budget-item");
+
+        const isOverBudget = budget.total_spent > budget.limit_amount;
+        const statusClass = isOverBudget ? "over-budget" : " within-budget " ;
     })
 }
 
