@@ -99,11 +99,10 @@ function editExpense(id) {
             const submitButton = document.querySelector("#add-expense-form button");
             submitButton.textContent = "Update Expense";
 
-            // Modify the form submission to update the expense
-            const form = document.getElementById('add-expenses-form');
-            form.onsubmit = function (event) {
-                event.preventDefault();
 
+            document.getElementById('add-expense-form').onsubmit = function (event) {
+                event.preventDefault();
+                
                 // Get the updated values from the form
                 const updatedAmount = document.getElementById('expense-amount').value;
                 const updatedDate = document.getElementById('expense-date').value;
