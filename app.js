@@ -228,6 +228,7 @@ function loadBudgets()  {
         div.classList.add("budget-item");
 
         const isOverBudget = budget.total_spent > budget.limit_amount;
+        const statusText = isOverBudget ? "Over Budget" : "Within Budget";
         const statusClass = isOverBudget ? "over-budget" : " within-budget " ;
 
         div.innerHTML = `
