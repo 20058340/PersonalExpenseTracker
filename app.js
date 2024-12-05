@@ -126,8 +126,7 @@ function editExpense(id) {
                     console.log("Expense updated:", data);
                     loadExpenses(); 
                     updateBudgetStatus(); 
-                    submitButton.textContent = "Add Expense";
-                    event.target.reset();
+                    
                 })
                 .catch(error => console.error("Error updating expense:", error));
             };
