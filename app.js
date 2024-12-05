@@ -162,6 +162,7 @@ function updateBudgetStatus() {
     fetch(`${baseURL}/budgets`)
         .then(response =>response.json())
         .then(data=> {
+            console.log("Budgets fetched:", data);
             const budgetSummary = document.getElementById("budget-summary");
             budgetSummary.innerHTML = "";
     
