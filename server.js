@@ -173,12 +173,12 @@ app.get('/budgets', (req, res) => {
 
     db.all(sql, [], (err, budgets) => {
         if (err) {
-            console.error("Error fetching budgets: ", err.message); // Log error message
+            console.error("Error fetching budgets: ", err.message); 
             return res.status(500).json({ error: 'Failed to retrieve budgets.' });
         }
         rows.forEach(budget => {
             budget.status = budget.total_spent > budget.limit_amount ? 'Over Budget' : 'Within Budget';
-        })
+        });
 
         
         res.json({ budgets: rows });
