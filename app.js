@@ -187,7 +187,7 @@ function updateBudgetStatus() {
                 });
             })
 
-            .catch(error => console.error("Error loading budgets:", error))
+            .catch(error => console.error("Error loading budgets:", error));
 
 }
 
