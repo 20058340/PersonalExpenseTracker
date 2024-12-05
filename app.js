@@ -182,7 +182,7 @@ function updateBudgetStatus() {
                 <button onclick= "deleteBudget(${budget.id})">Delete</button>
                 `;
 
-                    budgetSummary.appendChild(div);
+                budgetSummary.appendChild(div);
 
                 });
             })
