@@ -178,7 +178,7 @@ app.get('/budgets', (req, res) => {
         }
 
         console.log("Budgets sent to the frontend: ", rows);
-        
+
         rows.forEach(budget => {
             budget.status = budget.total_spent > budget.limit_amount ? 'Over Budget' : 'Within Budget';
         });
@@ -214,7 +214,8 @@ app.delete('/budgets/:id', (req, res) => {
     const sql = 'DELETE FROM budgets WHERE id = ?';
     db.run(sql, [id], function (err) {
         if (err) {
-            res.status(500).json({ error: 'Failed to delete budget.' });
+            console.error("Error deleting budgets", err.message);
+            return res.status(500).json({ error: 'Failed to delete budget.' });
         } else if (this.changes === 0) {
             res.status(404).json({ error: 'Budget not found.' });
         } else {
