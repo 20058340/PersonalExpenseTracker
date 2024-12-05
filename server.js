@@ -162,7 +162,7 @@ app.get('/budgets', (req, res) => {
             b.category_id, 
             b.limit_amount, 
             c.name As category_name,
-            IFNULL(SUM(e.amount), 0) AS total_spent  -- Calculate total spent for each category
+            IFNULL(SUM(e.amount), 0) AS total_spent
 
         FROM budgets b
         LEFT JOIN categories c ON b.category_id = c.id
@@ -176,6 +176,9 @@ app.get('/budgets', (req, res) => {
             console.error("Error fetching budgets: ", err.message); 
             return res.status(500).json({ error: 'Failed to retrieve budgets.' });
         }
+
+        console.log("Budgets sent to the frontend: ", rows);
+        
         rows.forEach(budget => {
             budget.status = budget.total_spent > budget.limit_amount ? 'Over Budget' : 'Within Budget';
         });
