@@ -179,10 +179,7 @@ app.get('/budgets', (req, res) => {
 
         console.log("Budgets sent to the frontend: ", rows);
 
-        rows.forEach(budget => {
-            budget.status = budget.total_spent > budget.limit_amount ? 'Over Budget' : 'Within Budget';
-        });
-
+        
         
         res.json({ budgets: rows });
     });
