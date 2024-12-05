@@ -190,6 +190,7 @@ function updateBudgetStatus() {
 
 }
 
+//delete budget
 function deleteBudget(id) {
     if (confirm("Are you sure you want to delete this budget?")) {
         fetch(`${baseURL}/budgets/${id}`, { method: 'DELETE' })
