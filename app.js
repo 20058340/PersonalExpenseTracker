@@ -177,14 +177,16 @@ function updateBudgetStatus() {
                     <strong>${ budget.category_name}</strong>:
                     Limit: ${budget.limit_amount} |
                     Spent: ${budget.total_spent || 0} |
-                    <span class= "${statusClass}">${isOverBudget ? "Over Budget" : "Within Budgets"}</span>`;
+                    <span class= "${statusClass}">${isOverBudget ? "Over Budget" : "Within Budgets"}</span>
+                    <button onclick= "deleteBudget(${budget.id})">Delete</button>
+                    `;
 
-        budgetSummary.appendChild(div);
+                    budgetSummary.appendChild(div);
 
-        });
-    })
+                });
+            })
 
-    .catch(error => console.error("Error loading budgets:", error))
+            .catch(error => console.error("Error loading budgets:", error))
 
 }
 
