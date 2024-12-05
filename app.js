@@ -158,27 +158,26 @@ function deleteExpense(id) {
 
 // Load budgets and display in budget summary 
 
-function loadBudgets() {
+function updateBudgetStatus() {
     fetch(`${baseURL}/budgets`)
-    .then(response =>response.json())
-    .then(data=> {
-        const budgetSummary = document.getElementById("budget-summary");
-        budgetSummary.innerHTML = "";
+        .then(response =>response.json())
+        .then(data=> {
+            const budgetSummary = document.getElementById("budget-summary");
+            budgetSummary.innerHTML = "";
     
 
-    data.budgets.forEach(budget =>  {
-        const isOverBudget = budget.total_spent > budget.limit_amount;
-        const statusText = isOverBudget ? "Over Budget" : "Within Budget";
-        const statusClass = isOverBudget ? "over-budget" : " within-budget " ;
+            data.budgets.forEach(budget =>  {
+                const isOverBudget = budget.total_spent > budget.limit_amount;
+                const statusClass = isOverBudget ? "over-budget" : " within-budget " ;
 
-        const div = document.createElement("div");
-        div.classList.add("budget-item");
+                const div = document.createElement("div");
+                div.classList.add("budget-item");
 
-        div.innerHTML = `
-        <strong>${ budget.category_name}</strong>:
-        Limit: ${budget.limit_amount} |
-        Spent: ${budget.total_spent || 0} |
-        <span class= "${statusClass}">${isOverBudget ? "Over Budget" : "Within Budgets"}</span>`;
+                div.innerHTML = `
+                    <strong>${ budget.category_name}</strong>:
+                    Limit: ${budget.limit_amount} |
+                    Spent: ${budget.total_spent || 0} |
+                    <span class= "${statusClass}">${isOverBudget ? "Over Budget" : "Within Budgets"}</span>`;
 
         budgetSummary.appendChild(div);
 
