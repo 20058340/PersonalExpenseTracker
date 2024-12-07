@@ -119,15 +119,13 @@ function editExpense(id) {
                     })
                 })
             
-                .then(response => response.json())
-                .then(data => {
-                    console.log("Expense updated:", data);
+                .then(() => {
                     loadExpenses(); 
                     updateBudgetStatus(); 
 
                     document.getElementById('add-expenses-form').reset();
                     submitButton.textContent= "Add-Expense";
-                    document.getElementById('add-expense-form').onsubmit = addExpensehandler;
+                    document.getElementById('add-expense-form').onsubmit = null;
                     
                 })
                 .catch(error => console.error("Error updating expense:", error));
