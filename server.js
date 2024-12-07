@@ -211,6 +211,7 @@ app.post('/budgets', (req, res) => {
 
 app.delete('/budgets/:id', (req, res) => {
     const { id } = req.params;
+    console.log("Request to delete budget with ID", id);
     const sql = 'DELETE FROM budgets WHERE id = ?';
     db.run(sql, [id], function (err) {
         if (err) {
@@ -222,6 +223,7 @@ app.delete('/budgets/:id', (req, res) => {
             return res.status(404).json({error: 'Budget not found'});
 
         }
+        console.log("Budget deleted successfully with ID", id)
         res.json({message : 'Budget deleted sucesfully'});
         
     });
