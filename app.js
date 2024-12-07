@@ -161,10 +161,9 @@ function updateBudgetStatus() {
                 const isOverBudget = budget.total_spent > budget.limit_amount;
                 const statusClass = isOverBudget ? "over-budget" : " within-budget " ;
 
-                const div = document.createElement("div");
-                div.classList.add("budget-item");
+                const li = document.createElement("li");
 
-                div.innerHTML = `
+                li.innerHTML = `
                 <strong>${ budget.category_name}</strong>:
                 Limit: ${budget.limit_amount} |
                 Spent: ${budget.total_spent || 0} |
