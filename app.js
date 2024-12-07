@@ -186,7 +186,7 @@ function updateBudgetStatus() {
 function deleteBudget(id) {
     console.log("Deleting budget with ID:", id);
     if (confirm("Are you sure you want to delete this budget?")) {
-        //fetch(`${baseURL}/budgets/${id}`, { method: 'DELETE' })
+        fetch(`${baseURL}/budgets/${id}`, { method: 'DELETE' })
 
         .then((response) => {
             if (response.ok) {
