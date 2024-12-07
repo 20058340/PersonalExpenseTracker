@@ -184,12 +184,22 @@ function updateBudgetStatus() {
 
 //delete budget
 function deleteBudget(id) {
+    console.log("Deleting budget with ID:", id);
+    if (confirm("Are you sure you want to delete this budget?")) {
+        fetch(`${baseURL}/budgets/${id}`, { method: 'DELETE' })
 
-        if (confirm("Are you sure you want to delete this budget?")) {
-            fetch(`${baseURL}/budgets/${id}`, { method: 'DELETE' })
+        .then((response) => {
+            if (response.ok) {
+                console.log("Budget deleted successfully.")
+                updateBudgetStatus();
 
-            .then(() => updateBudgetStatus())
-            .catch(error => console.error("Error deleting budget:", error));
+            }else {
+                console.error("Error deleting budget.")
+            }
+        })
+            
+            
+        .catch(error => console.error("Error deleting budget:", error));
      
     }
 }
