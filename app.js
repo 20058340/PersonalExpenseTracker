@@ -202,7 +202,7 @@ function deleteBudget(id) {
 
                 if (response.ok) {
                     console.log("Budget deleted successfully.");
-                    loadBudgets();
+                    updateBudgetStatus();
 
                 } else {
                     console.error("Error deleting budget.");
