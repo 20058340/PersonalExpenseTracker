@@ -33,13 +33,13 @@ function loadCategories() {
 }
 
 // Add Expense - Handling Form Submission
-document.getElementById('add-expense-form').addEventListener('submit', function (event) {
+document.getElementById("add-expense-form").addEventListener("submit", function (event) {
     event.preventDefault();
 
-    const amount = document.getElementById('expense-amount').value;
-    const date = document.getElementById('expense-date').value;
-    const category = document.getElementById('expense-category').value;
-    const description = document.getElementById('expense-description').value;
+    const amount = parseFloat(document.getElementById("expense-amount").value);
+    const date = document.getElementById("expense-date").value;
+    const category = parseInt(document.getElementById("expense-category").value);
+    const description = document.getElementById("expense-description").value;
 
     fetch(`${baseURL}/expenses`, {
         method: 'POST',
