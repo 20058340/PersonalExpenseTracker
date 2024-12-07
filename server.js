@@ -155,7 +155,7 @@ app.delete('/expenses/:id', (req, res) => {
 
 // Get all budgets
 
-app.get('/budgets', (req, res) => {
+app.get("/budgets", (req, res) => {
     const sql = `
         SELECT 
             b.id, 
@@ -171,7 +171,7 @@ app.get('/budgets', (req, res) => {
 
     
 
-    db.all(sql, [], (err, budgets) => {
+    db.all(sql, [], (err, rows) => {
         if (err) {
             console.error("Error fetching budgets: ", err.message); 
             return res.status(500).json({ error: 'Failed to retrieve budgets.' });
