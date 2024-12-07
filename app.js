@@ -170,7 +170,7 @@ function updateBudgetStatus() {
                 Limit: ${budget.limit_amount} |
                 Spent: ${budget.total_spent || 0} |
                 <span class= "${statusClass}">${isOverBudget ? "Over Budget" : "Within Budgets"}</span>
-                <button onclick= "deleteBudget(${budgets.id})">Delete</button>
+                <button onclick= "deleteBudgets(${budgets.id})">Delete</button>
                 `;
 
                 budgetSummary.appendChild(budgetDiv);
