@@ -194,7 +194,7 @@ function deleteBudget(id) {
                 updateBudgetStatus();
 
             }else {
-                console.error("Error deleting budget.")
+                console.log("Error deleting budget.")
             }
         })
             
