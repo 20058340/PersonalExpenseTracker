@@ -217,14 +217,14 @@ app.delete('/budgets/:id', (req, res) => {
             console.error("Error deleting budgets", err.message);
             return res.status(500).json({ error: 'Failed to delete budget.' });
         } 
-        if (this.changes === 0 ){
+        else if (this.changes === 0 ){
             console.error("Budget not found for ID:", id);
             return res.status(404).json({error: 'Budget not found'});
 
-        }
-        console.log("Budget deleted successfully with ID", id)
-        res.json({message : 'Budget deleted sucesfully'});
+        }else{
         
+        res.json({message : 'Budget deleted sucesfully'});
+        }
     });
 });
 
