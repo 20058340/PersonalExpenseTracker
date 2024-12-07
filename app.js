@@ -153,6 +153,7 @@ function updateBudgetStatus() {
     fetch(`${baseURL}/budgets`)
         .then(response =>response.json())
         .then(data=> {
+            console.log("Budgets fetched:", data);
             const budgetSummary = document.getElementById("budget-summary");
             budgetSummary.innerHTML = "";
     
@@ -161,9 +162,10 @@ function updateBudgetStatus() {
                 const isOverBudget = budget.total_spent > budget.limit_amount;
                 const statusClass = isOverBudget ? "over-budget" : " within-budget " ;
 
-                const li = document.createElement("li");
+                const budgetDiv = document.createElement("li");
+                budgetDiv.classList.add("budget-item");
 
-                li.innerHTML = `
+                budgetDiv.innerHTML = `
                 <strong>${ budget.category_name}</strong>:
                 Limit: ${budget.limit_amount} |
                 Spent: ${budget.total_spent || 0} |
@@ -171,7 +173,7 @@ function updateBudgetStatus() {
                 <button onclick= "deleteBudget(${budget.id})">Delete</button>
                 `;
 
-                budgetSummary.appendChild(div);
+                budgetSummary.appendChild(budgetDiv);
 
                 });
             })
