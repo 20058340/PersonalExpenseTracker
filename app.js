@@ -203,7 +203,7 @@ document.getElementById('set-budget-form').addEventListener('submit', function (
 
 
     fetch(`${baseURL}/budgets`, {
-        method: 'POST',
+        method: 'GET',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ category_id: category, limit_amount: limit }),
     })
