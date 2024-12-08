@@ -189,6 +189,9 @@ document.getElementById('set-budget-form').addEventListener('submit', function (
     const category = document.getElementById('budget-category').value;
     const limit = document.getElementById('budget-limit').value;
 
+    console.log("Category ID:", category);
+    console.log("Limit Amount:", limit);
+
     fetch(`${baseURL}/budgets`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
