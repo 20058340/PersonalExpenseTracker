@@ -158,19 +158,19 @@ function updateBudgetStatus() {
             budgetSummary.innerHTML = "";
     
 
-            data.budgets.forEach(budget =>  {
-                const isOverBudget = budget.total_spent > budget.limit_amount;
+            data.budgets.forEach(budgets =>  {
+                const isOverBudget = budgets.total_spent > budgets.limit_amount;
                 const statusClass = isOverBudget ? "over-budget" : " within-budget " ;
 
                 const budgetDiv = document.createElement("li");
                 budgetDiv.classList.add("budget-item");
 
                 budgetDiv.innerHTML = `
-                <strong>${ budget.category_name}</strong>:
-                Limit: ${budget.limit_amount} |
-                Spent: ${budget.total_spent || 0} |
+                <strong>${ budgets.category_name}</strong>:
+                Limit: ${budgets.limit_amount} |
+                Spent: ${budgets.total_spent || 0} |
                 <span class= "${statusClass}">${isOverBudget ? "Over Budget" : "Within Budgets"}</span>
-                <button onclick= "deleteBudget(${budget.id})">Delete</button>
+                <button onclick= "deleteBudget(${budgets.id})">Delete</button>
                 `;
 
                 budgetSummary.appendChild(budgetDiv);
