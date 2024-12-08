@@ -155,7 +155,7 @@ app.delete('/expenses/:id', (req, res) => {
 
 // Get all budgets
 
-app.get("/budgets", (req, res) => {
+app.get('/budgets', (req, res) => {
     const sql = `
         SELECT 
             b.id, 
