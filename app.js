@@ -189,6 +189,7 @@ function deleteBudget(id) {
         fetch(`${baseURL}/budgets/${id}`, { method: 'DELETE' })
 
         .then(response => {
+            console.log(`Delete request status for budget ID ${id}:`, response.status);
             if (response.ok) {
                 console.log("Budget deleted successfully.");
                 updateBudgetStatus();
