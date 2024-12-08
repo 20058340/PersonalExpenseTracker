@@ -190,6 +190,11 @@ app.get('/budgets', (req, res) => {
 // Set or Update a Budget
 app.post('/budgets', (req, res) => {
     const { category_id, limit_amount } = req.body;
+
+    if (!category_id || !limit_amount) {
+        return res.status(400).json({ error: 'Category ID and Limit Amount are required.' });
+    }
+    
     const sql= `INSERT INTO budgets (category_id, limit_amount)
     values(?, ?)
     ON CONFLICT(category_id) DO UPDATE SET limit_amount = excluded.limit_amount`;
