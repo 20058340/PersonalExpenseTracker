@@ -142,7 +142,8 @@ function editExpense(id) {
 function deleteExpense(id) {
     if (confirm("Are you sure you want to delete this expense?")) {
         fetch(`${baseURL}/expenses/${id}`, { method: 'DELETE' })
-            .then(() => {
+            .then(response => {
+                console.log("Expense deleted successfully.");
                 loadExpenses(); 
                 updateBudgetStatus();
             }) 
