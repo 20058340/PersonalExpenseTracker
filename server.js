@@ -39,7 +39,7 @@ db.serialize(() => {
 
     db.run(`CREATE TABLE IF NOT EXISTS budgets (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        category_id INTEGER UNIQUE,
+        category_id INTEGER UNIQUE, -- Ensure this column is unique
         limit_amount REAL NOT NULL,
         FOREIGN KEY (category_id) REFERENCES categories (id)
     )`);
