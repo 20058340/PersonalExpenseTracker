@@ -209,7 +209,7 @@ app.post('/budgets', (req, res) => {
 // delete a budget
 
 app.delete('/budgets/:id', (req, res) => {
-    const { id } = req.params;
+    const { id } = req.params.id;
     console.log("Request to delete budget with ID", id);
    
     const sql = 'DELETE FROM budgets WHERE id = ?';
