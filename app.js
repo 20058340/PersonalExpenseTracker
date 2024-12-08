@@ -195,7 +195,7 @@ function deleteBudget(id) {
                 updateBudgetStatus();
 
             }else {
-                console.error("Error deleting budget.");
+                console.error(`Error deleting budget.Status: ${response.statusText}`);
             }
         })
             
