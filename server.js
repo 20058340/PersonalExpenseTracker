@@ -162,8 +162,7 @@ app.get('/budgets', (req, res) => {
             b.category_id, 
             b.limit_amount, 
             c.name As category_name,
-            IFNULL(SUM(e.amount), 0) AS total_spent
-
+            IFNULL(SUM(e.amount), 0) AS total_spent --Properly calculate spent
         FROM budgets b
         LEFT JOIN categories c ON b.category_id = c.id
         LEFT JOIN expenses e ON b.category_id = e.category_id
@@ -223,7 +222,7 @@ app.delete('/budgets/:id', (req, res) => {
             return res.status(404).json({error: 'Budget not found'});
 
         }
-        console.log("Budget deleted successfully with ID", id);
+        console.log(`Budget with ID $(id) deleted successfully`, id);
         res.json({message : 'Budget deleted sucesfully'});
         
     });
