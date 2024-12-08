@@ -222,6 +222,7 @@ document.getElementById('set-budget-form').addEventListener('submit', function (
     })
     .catch(error => {
         console.error("Error setting budget:", error);
+    });
 });
 
 
@@ -257,4 +258,4 @@ function deleteBudget(id) {
 loadCategories();
 loadExpenses();
 updateBudgetStatus();
-})
+
