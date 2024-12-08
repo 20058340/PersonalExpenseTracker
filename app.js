@@ -194,8 +194,16 @@ document.getElementById('set-budget-form').addEventListener('submit', function (
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ category_id: category, limit_amount: limit }),
     })
-
     
+    .then(response => response.json())
+    .then(data => {
+        console.log("Budget set:", data);
+        updateBudgetStatus();
+        event.target.reset();
+    })
+    
+
+
 
 //delete budget
 function deleteBudget(id) {
