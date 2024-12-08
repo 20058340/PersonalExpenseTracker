@@ -201,8 +201,6 @@ document.getElementById('set-budget-form').addEventListener('submit', function (
     .then(response => response.json())
     .then(data => {
         console.log("Budget set:", data);
-        updateBudgetStatus();
-        event.target.reset();
     })
     .catch(error => console.error("Error setting budget:", error));
 });
