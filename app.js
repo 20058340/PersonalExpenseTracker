@@ -189,6 +189,14 @@ document.getElementById('set-budget-form').addEventListener('submit', function (
     const category = document.getElementById('budget-category').value;
     const limit = document.getElementById('budget-limit').value;
 
+    fetch(`${baseURL}/budgets`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ category_id: category, limit_amount: limit }),
+    })
+
+    
+
 //delete budget
 function deleteBudget(id) {
     console.log("Deleting budget with ID:", id);
