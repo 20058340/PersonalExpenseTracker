@@ -1,8 +1,6 @@
 //const { response } = require("express");
 
-const { json } = require("body-parser");
-
-const { response } = require("express");
+//const { response } = require("express");
 
 // Base URL for API requests
 const baseURL = "http://localhost:3000";
@@ -210,21 +208,12 @@ document.getElementById('set-budget-form').addEventListener('submit', function (
         body: JSON.stringify({ category_id: category, limit_amount: limit }),
     })
     
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Failed to create or update the budget');
-        }
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
         console.log("Budget set:", data);
-        updateBudgetStatus();
     })
-    .catch(error => {
-        console.error("Error setting budget:", error);
-    });
+    .catch(error => console.error("Error setting budget:", error));
 });
-
 
 
 
@@ -258,4 +247,3 @@ function deleteBudget(id) {
 loadCategories();
 loadExpenses();
 updateBudgetStatus();
-
