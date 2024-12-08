@@ -189,6 +189,9 @@ document.getElementById('set-budget-form').addEventListener('submit', function (
     const category = document.getElementById('budget-category').value;
     const limit = document.getElementById('budget-limit').value;
 
+    console.log("Category ID:", category);
+    console.log("Limit Amount:", limit);
+
     if (!category || !limit) {
         alert("Please select a category and enter a budget limit.");
         return;
