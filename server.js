@@ -51,6 +51,10 @@ db.serialize(() => {
 // CRUD Operations
 // ==================
 
+app.get('/', (req, res) => {
+    res.send('Welcome to the Personal Expense Tracker API!');
+});
+
 // ---- CATEGORIES ----
 
 // Get all categories
@@ -213,7 +217,7 @@ app.post('/budgets', (req, res) => {
 // delete a budget
 
 app.delete('/budgets/:id', (req, res) => {
-    const { id } = req.params.id;
+    const { id } = req.params;
     console.log("Request to delete budget with ID:", id);
    
     const sql = 'DELETE FROM budgets WHERE id = ?';
