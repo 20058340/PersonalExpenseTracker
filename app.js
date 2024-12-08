@@ -182,6 +182,13 @@ function updateBudgetStatus() {
 
 }
 
+// Set or update a budget
+document.getElementById('set-budget-form').addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    const category = document.getElementById('budget-category').value;
+    const limit = document.getElementById('budget-limit').value;
+
 //delete budget
 function deleteBudget(id) {
     console.log("Deleting budget with ID:", id);
