@@ -165,7 +165,7 @@ function updateBudgetStatus() {
                 const budgetDiv = document.createElement("div");
                 div.classList.add("budget-item");
 
-                div.innerHTML = `
+                budgetDiv.innerHTML = `
                 <strong>${ budgets.category_name}</strong>:
                 Limit: ${budgets.limit_amount} |
                 Spent: ${budgets.total_spent || 0} |
