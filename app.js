@@ -28,6 +28,7 @@ function loadCategories() {
                 expenseCategoryDropdown.appendChild(option.cloneNode(true));
                 budgetCategoryDropdown.appendChild(option);
             });
+            console.log("Categories loaded:", data.categories);
         })
         .catch(error => console.error("Error loading categories:", error));
 }
