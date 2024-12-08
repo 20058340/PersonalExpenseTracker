@@ -28,7 +28,7 @@ function loadCategories() {
                 expenseCategoryDropdown.appendChild(option.cloneNode(true));
                 budgetCategoryDropdown.appendChild(option);
             });
-            console.log("Categories loaded:", data.categories);
+            
         })
         .catch(error => console.error("Error loading categories:", error));
 }
@@ -120,15 +120,13 @@ function editExpense(id) {
                     })
                 })
             
-                .then(response => response.json())
-                .then(data => {
-                    console.log("Expense updated:", data);
+                .then(() => {
                     loadExpenses(); 
                     updateBudgetStatus(); 
 
-                    
+                    document.getElementById('add-expenses-form').reset();
                     submitButton.textContent= "Add-Expense";
-                    event.target.reset();
+                    document.getElementById('add-expense-form').onsubmit = null;
                     
                 })
                 .catch(error => console.error("Error updating expense:", error));
@@ -142,8 +140,7 @@ function editExpense(id) {
 function deleteExpense(id) {
     if (confirm("Are you sure you want to delete this expense?")) {
         fetch(`${baseURL}/expenses/${id}`, { method: 'DELETE' })
-            .then(response => {
-                console.log("Expense deleted successfully.");
+            .then(() => {
                 loadExpenses(); 
                 updateBudgetStatus();
             }) 
