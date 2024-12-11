@@ -69,32 +69,33 @@ $(document).on('click', '.delete-category-btn', function () {
     }
 });
 
-// Load Expenses into the Table
-function loadExpenses() {
-    fetch(`${baseURL}/expenses`)
-        .then(response => response.json())
-        .then(data => {
-            const expenseTableBody = document.getElementById("expense-table-body");
-            expenseTableBody.innerHTML = "";
+// Fetch Expenses
+function fetchExpenses() {
+    $.get(`${API_BASE_URL}/expenses`, function (data) {
+        $('#expense-table-body').empty();
 
+        if (data.expenses.length === 0) {
+            $('#expense-table-body').append('<tr><td colspan="5">No expenses recorded</td></tr>');
+        } else {
             data.expenses.forEach(expense => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td>${expense.amount}</td>
-                    <td>${expense.date}</td>
-                    <td>${expense.category_name}</td>
-                    <td>${expense.description}</td>
-                    <td>
-                        <button class="edit-expense-btn" onclick="editExpense(${expense.id})">Edit</button>
-                        <button class="delete-expense-btn" data-id="${expense.id}">Delete</button>
-                    </td>
-                `;
-                expenseTableBody.appendChild(row);
+                $('#expense-table-body').append(`
+                    <tr>
+                        <td>$${expense.amount}</td>
+                        <td>${expense.date}</td>
+                        <td>${expense.category_name}</td>
+                        <td>${expense.description}</td>
+                        <td>
+                            <button class="edit-expense-btn" data-id="${expense.id}">Edit</button>
+                            <button class="delete-expense-btn" data-id="${expense.id}">Delete</button>
+                        </td>
+                    </tr>
+                `);
             });
-        })
-        .catch(error => console.error("Error loading expenses:", error));
+        }
+    }).fail(function () {
+        alert('Failed to fetch expenses');
+    });
 }
-
 // Function to edit an expense
 function editExpense(id) {
     fetch(`${baseURL}/expenses/${id}`)
