@@ -51,6 +51,24 @@ function addCategory() {
     });
 }
 
+// Delete Category
+$(document).on('click', '.delete-category-btn', function () {
+    const categoryId = $(this).data('id');
+    if (confirm('Are you sure you want to delete this category?')) {
+        $.ajax({
+            url: `${API_BASE_URL}/categories/${categoryId}`,
+            method: 'DELETE',
+            success: function () {
+                alert('Category deleted successfully!');
+                fetchCategories();
+            },
+            error: function () {
+                alert('Failed to delete category.');
+            }
+        });
+    }
+});
+
 // Load Expenses into the Table
 function loadExpenses() {
     fetch(`${baseURL}/expenses`)
