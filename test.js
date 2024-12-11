@@ -78,3 +78,17 @@ describe('Expense Tracker Application', () => {
         
         expect($('#expense-table-body').html()).not.toContain('Expense 1');
     });
+
+    // Test editing an expense
+    it('should edit an existing expense', async () => {
+        
+        $.get.mockImplementationOnce((url, callback) => {
+            callback({
+                id: 1,
+                amount: 50,
+                date: '2024-12-10',
+                category_name: 'Food',
+                description: 'Dinner'
+            });
+        });
+        await app.editExpense(1);
