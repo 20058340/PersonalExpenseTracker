@@ -129,6 +129,19 @@ function addOrUpdateExpense() {
         }
     });
 }
+
+// Edit Expense
+$(document).on('click', '.edit-expense-btn', function () {
+    const expenseId = $(this).data('id');
+    $.get(`${API_BASE_URL}/expenses/${expenseId}`, function (data) {
+        $('#expense-id').val(data.id);
+        $('#expense-amount').val(data.amount);
+        $('#expense-date').val(data.date);
+        $('#expense-category').val(data.category_id);
+        $('#expense-description').val(data.description);
+        $('#expense-form button[type="submit"]').text('Update Expense');
+    });
+});
 // jQuery-based Delete Expense
 $(document).on('click', '.delete-expense-btn', function () {
     const expenseId = $(this).data('id');
