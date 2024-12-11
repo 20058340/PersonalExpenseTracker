@@ -62,3 +62,19 @@ describe('Expense Tracker Application', () => {
 
         expect($.ajax).toHaveBeenCalled();
     });
+
+    // Test deleting an expense
+    it('should delete an expense', async () => {
+        
+        $.ajax.mockImplementationOnce((options) => {
+            expect(options.method).toBe('DELETE');
+            expect(options.url).toBe('http://localhost:4000/expenses/1');
+            options.success(); // Mock success callback
+        });
+
+        
+        await app.deleteExpense(1);
+
+        
+        expect($('#expense-table-body').html()).not.toContain('Expense 1');
+    });
