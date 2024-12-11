@@ -50,3 +50,15 @@ describe('Expense Tracker Application', () => {
         // Ensure no call to API is made if fields are empty
         expect($.ajax).not.toHaveBeenCalled();
     });
+
+    // Test expense validation for valid date format
+    it('should validate date format correctly', () => {
+        $('#expense-amount').val('100');
+        $('#expense-date').val('2024-12-11'); 
+        $('#expense-category').val('1');
+        $('#expense-description').val('Lunch');
+
+        app.addOrUpdateExpense();
+
+        expect($.ajax).toHaveBeenCalled();
+    });
