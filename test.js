@@ -1,5 +1,6 @@
 import $ from 'jquery';
 
+
 const $ = require('jquery'); 
 const app = require('./app');
 
