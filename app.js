@@ -230,6 +230,25 @@ $(document).on('click', '.edit-budget-btn', function () {
     $('#budget-form button[type="submit"]').text('Update Budget');
 });
 
+// Delete Budget
+$(document).on('click', '.delete-budget-btn', function () {
+    const budgetId = $(this).data('id');
+    if (confirm('Are you sure you want to delete this budget?')) {
+        $.ajax({
+            url: `${API_BASE_URL}/budgets/${budgetId}`,
+            method: 'DELETE',
+            success: function () {
+                alert('Budget deleted successfully!');
+                fetchBudgets();
+            },
+            error: function () {
+                alert('Failed to delete budget.');
+            }
+        });
+    }
+});
+
+
 
 
     
