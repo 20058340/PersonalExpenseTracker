@@ -264,6 +264,7 @@ $(document).ready(function () {
                     fetchBudgets();
                 },
                 error: function () {
+
                     alert('Failed to delete budget.');
                 }
             });
