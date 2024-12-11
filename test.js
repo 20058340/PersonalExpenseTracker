@@ -1,13 +1,13 @@
 import $ from 'jquery';
+import app from './app';
 
-
-const $ = require('jquery'); 
-const app = require('./app');
-
-
+// Mock jQuery methods
 jest.mock('jquery', () => ({
     get: jest.fn(),
     ajax: jest.fn(),
+    val: jest.fn(),
+    html: jest.fn(),
+    append: jest.fn(),
 }));
 
 describe('Expense Tracker Application', () => {
@@ -69,23 +69,20 @@ describe('Expense Tracker Application', () => {
 
     // Test deleting an expense
     it('should delete an expense', async () => {
-        
         $.ajax.mockImplementationOnce((options) => {
             expect(options.method).toBe('DELETE');
             expect(options.url).toBe('http://localhost:4000/expenses/1');
             options.success(); // Mock success callback
         });
 
-        
         await app.deleteExpense(1);
 
-        
+        // Check if the expense was removed
         expect($('#expense-table-body').html()).not.toContain('Expense 1');
     });
 
     // Test editing an expense
     it('should edit an existing expense', async () => {
-        
         $.get.mockImplementationOnce((url, callback) => {
             callback({
                 id: 1,
@@ -103,27 +100,12 @@ describe('Expense Tracker Application', () => {
         expect($('#expense-description').val()).toBe('Dinner');
     });
 
-    // Test fetching expenses
+    // Test fetching expenses and displaying them
     it('should fetch expenses and display them', async () => {
-    
         $.get.mockImplementationOnce((url, callback) => {
             callback({ expenses: [{ id: 1, amount: 100, date: '2024-12-10', category_name: 'Food', description: 'Lunch' }] });
         });
 
-        await app.fetchExpenses();
-
-        expect($('#expense-id').val()).toBe('1');
-        expect($('#expense-amount').val()).toBe('50');
-        expect($('#expense-category').val()).toBe('Food');
-        expect($('#expense-description').val()).toBe('Dinner');
-    });
-
-    // Test fetching expenses
-    it('should fetch expenses and display them', async () => {
-        
-        $.get.mockImplementationOnce((url, callback) => {
-            callback({ expenses: [{ id: 1, amount: 100, date: '2024-12-10', category_name: 'Food', description: 'Lunch' }] });
-        });
         await app.fetchExpenses();
 
         expect($('#expense-table-body').html()).toContain('100');
@@ -144,6 +126,7 @@ describe('Expense Tracker Application', () => {
 
         expect(submitButton.prop('disabled')).toBe(true);
 
+        // Assume there's a method to handle completion or AJAX success
         await app.completeSubmit(); 
         expect(submitButton.prop('disabled')).toBe(false);
     });
