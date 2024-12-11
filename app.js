@@ -198,4 +198,11 @@ function setOrUpdateBudget() {
         return;
     }
 
+    const method = budgetId ? 'PUT' : 'POST';
+    const url = budgetId ? `${API_BASE_URL}/budgets/${budgetId}` : `${API_BASE_URL}/budgets`;
+
+    
+
+
+
     
