@@ -7,29 +7,34 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Personal Expense Tracker</h1>
+    <div id="app">
+        <h1>Personal Expense Tracker</h1>
 
-    <!-- Form for Adding an Expense -->
-    <section id="expense-form">
-        <h2>Add Expense</h2>
-        <form id="add-expense-form">
-            <label for="expense-amount">Amount:</label>
-            <input type="number" id="expense-amount" required />
+         <!-- Categories Section -->
+         <div id="categories-section">
+            <h2>Category</h2>
+            <form id="category-form">
+                <label for="category-name">New Category Name</label>
+                <input type="text" id="category-name" placeholder="New Category Name" required>
+                <button type="submit">Add Category</button>
+            </form>
+            <ul id="categories-list">
+                <li>
+                    Category 1
+                    <div class="actions">
+                        <button class="delete-btn">Delete</button>
+                    </div>
+                </li>
+                <li>
+                    Category 2
+                    <div class="actions">
+                        <button class="delete-btn">Delete</button>
+                    </div>
+                </li>
+            </ul>
+        </div>
 
-            <label for="expense-date">Date:</label>
-            <input type="date" id="expense-date" required />
-
-            <label for="expense-category">Category:</label>
-            <select id="expense-category" required>
-                <!-- Categories will be dynamically loaded here -->
-            </select>
-
-            <label for="expense-description">Description:</label>
-            <input type="text" id="expense-description" />
-
-            <button type="submit">Add Expense</button>
-        </form>
-    </section>
+    
 
     <!-- Section to Display Expenses -->
     <section id="expense-list">
