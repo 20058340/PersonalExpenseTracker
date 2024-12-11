@@ -1,217 +1,272 @@
-// Base URL for API requests
-const baseURL = "http://localhost:3000";
+$(document).ready(function () {
+    const API_BASE_URL = 'http://localhost:4000';
 
-// Load Categories into Dropdowns 
-function loadCategories() {
-    fetch(`${baseURL}/categories`)
-        .then(response => response.json())
-        .then(data => {
-            const expenseCategoryDropdown = document.getElementById("expense-category");
-            expenseCategoryDropdown.innerHTML = ""; 
+    // Initial fetch
+    fetchCategories();
+    fetchExpenses();
+    fetchBudgets();
 
-            data.categories.forEach(category => {
-                const option = document.createElement("option");
-                option.value = category.id;
-                option.textContent = category.name;
-                expenseCategoryDropdown.appendChild(option);
-            });
-        })
-        .catch(error => console.error("Error loading categories:", error));
-}
+    // Event Listeners
+    $('#category-form').submit(function (e) {
+        e.preventDefault();
+        addCategory();
+    });
 
-// Add Expense - Handling Form Submission
-document.getElementById('add-expense-form').addEventListener('submit', function (event) {
-    event.preventDefault();
+    $('#expense-form').submit(function (e) {
+        e.preventDefault();
+        addOrUpdateExpense(); // Handles both adding and updating
+    });
 
-    const amount = document.getElementById('expense-amount').value;
-    const date = document.getElementById('expense-date').value;
-    const category = document.getElementById('expense-category').value;
-    const description = document.getElementById('expense-description').value;
+    $('#budget-form').submit(function (e) {
+        e.preventDefault();
+        setOrUpdateBudget(); // Handles both setting and updating
+    });
 
-    fetch(`${baseURL}/expenses`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount, date, category_id: category, description }),
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Expense added:", data);
-            loadExpenses(); 
-            updateBudgetStatus(); 
-        })
-        .catch(error => console.error("Error adding expense:", error));
-});
+    // Fetch Categories
+    function fetchCategories() {
+        $.get(`${API_BASE_URL}/categories`, function (data) {
+            $('#categories-list').empty();
+            $('#expense-category, #budget-category').empty().append('<option value="">Select Category</option>');
 
-// Load Expenses into the Table
-function loadExpenses() {
-    fetch(`${baseURL}/expenses`)
-        .then(response => response.json())
-        .then(data => {
-            const expenseTableBody = document.getElementById("expense-table-body");
-            expenseTableBody.innerHTML = ""; 
-
-            data.expenses.forEach(expense => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td>${expense.amount}</td>
-                    <td>${expense.date}</td>
-                    <td>${expense.category_name}</td>
-                    <td>${expense.description}</td>
-                    <td>
-                        <button onclick="editExpense(${expense.id})">Edit</button>
-                        <button onclick="deleteExpense(${expense.id})">Delete</button>
-                    </td>
-                `;
-                expenseTableBody.appendChild(row);
-            });
-        })
-        .catch(error => console.error("Error loading expenses:", error));
-}
-
-// Function to edit an expense
-function editExpense(id) {
-    fetch(`${baseURL}/expenses/${id}`)
-        .then(response => response.json())
-        .then(expense => {
-            // Pre-fill the form with the current expense data
-            document.getElementById('expense-amount').value = expense.amount;
-            document.getElementById('expense-date').value = expense.date;
-            document.getElementById('expense-category').value = expense.category_id;
-            document.getElementById('expense-description').value = expense.description;
-
-            // Change the form button to "Update"
-            const submitButton = document.querySelector("#add-expense-form button");
-            submitButton.textContent = "Update Expense";
-
-            // Modify the form submission to update the expense
-            const form = document.getElementById('add-expenses-form');
-            form.onsubmit = function (event) {
-                event.preventDefault();
-
-                // Get the updated values from the form
-                const updatedAmount = document.getElementById('expense-amount').value;
-                const updatedDate = document.getElementById('expense-date').value;
-                const updatedCategory = document.getElementById('expense-category').value;
-                const updatedDescription = document.getElementById('expense-description').value;
-
-                // Send the updated expense data to the server
-                fetch(`${baseURL}/expenses/${id}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        amount: updatedAmount,
-                        date: updatedDate,
-                        category_id: updatedCategory,
-                        description: updatedDescription
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log("Expense updated:", data);
-                    loadExpenses(); // Reload the expenses table
-                    updateBudgetStatus(); // Update budget status after updating expense
-                    // Reset the form and button text
-                    form.reset();
-                    submitButton.textContent = "Add Expense";
-                    form.onsubmit = addExpense; 
-                })
-                .catch(error => console.error("Error updating expense:", error));
-            };
-        })
-        .catch(error => console.error("Error fetching expenses  data "));
+            if (data.categories.length === 0) {
+                $('#categories-list').append('<li>No categories available</li>');
+            } else {
+                data.categories.forEach(category => {
+                    $('#categories-list').append(`
+                        <li>
+                            ${category.name}
+                            <button class="delete-category-btn" data-id="${category.id}">Delete</button>
+                        </li>
+                    `);
+                    $('#expense-category').append(`<option value="${category.id}">${category.name}</option>`);
+                    $('#budget-category').append(`<option value="${category.id}">${category.name}</option>`);
+                });
+            }
+        }).fail(function () {
+            alert('Failed to fetch categories');
+        });
     }
-        
-      
-// Delete Expense
-function deleteExpense(id) {
-    if (confirm("Are you sure you want to delete this expense?")) {
-        fetch(`${baseURL}/expenses/${id}`, { method: 'DELETE' })
-            .then(response => {
-                if (response.ok) {
-                    console.log("Expense deleted successfully.");
-                    loadExpenses(); // Reload expenses after deletion
-                    updateBudgetStatus(); // Update budget status after deletion
-                } else {
-                    console.error("Error deleting expense.");
+
+    // Add Category
+    function addCategory() {
+        const categoryName = $('#category-name').val();
+        if (!categoryName) {
+            alert('Please enter a category name.');
+            return;
+        }
+
+        $.ajax({
+            url: `${API_BASE_URL}/categories`,
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ name: categoryName }),
+            success: function () {
+                alert('Category added successfully!');
+                fetchCategories();
+                $('#category-name').val('');
+            },
+            error: function () {
+                alert('Failed to add category.');
+            }
+        });
+    }
+
+    // Delete Category
+    $(document).on('click', '.delete-category-btn', function () {
+        const categoryId = $(this).data('id');
+        if (confirm('Are you sure you want to delete this category?')) {
+            $.ajax({
+                url: `${API_BASE_URL}/categories/${categoryId}`,
+                method: 'DELETE',
+                success: function () {
+                    alert('Category deleted successfully!');
+                    fetchCategories();
+                },
+                error: function () {
+                    alert('Failed to delete category.');
                 }
-            })
-            .catch(error => console.error("Error deleting expense:", error));
+            });
+        }
+    });
+
+    // Fetch Expenses
+    function fetchExpenses() {
+        $.get(`${API_BASE_URL}/expenses`, function (data) {
+            $('#expense-table-body').empty();
+
+            if (data.expenses.length === 0) {
+                $('#expense-table-body').append('<tr><td colspan="5">No expenses recorded</td></tr>');
+            } else {
+                data.expenses.forEach(expense => {
+                    $('#expense-table-body').append(`
+                        <tr>
+                            <td>$${expense.amount}</td>
+                            <td>${expense.date}</td>
+                            <td>${expense.category_name}</td>
+                            <td>${expense.description}</td>
+                            <td>
+                                <button class="edit-expense-btn" data-id="${expense.id}">Edit</button>
+                                <button class="delete-expense-btn" data-id="${expense.id}">Delete</button>
+                            </td>
+                        </tr>
+                    `);
+                });
+            }
+        }).fail(function () {
+            alert('Failed to fetch expenses');
+        });
     }
-}
 
-// Load Budget Categories into Dropdown
-function loadBudgetCategories() {
-    fetch(`${baseURL}/categories`)
-        .then(response => response.json())
-        .then(data => {
-            const budgetCategoryDropdown = document.getElementById("budget-category");
-            budgetCategoryDropdown.innerHTML = ""; // Clear existing options
+    // Add or Update Expense
+    function addOrUpdateExpense() {
+        const expenseId = $('#expense-id').val(); // Hidden input for expense ID
+        const amount = $('#expense-amount').val();
+        const date = $('#expense-date').val();
+        const categoryId = $('#expense-category').val();
+        const description = $('#expense-description').val();
 
-            data.categories.forEach(category => {
-                const option = document.createElement("option");
-                option.value = category.id;
-                option.textContent = category.name;
-                budgetCategoryDropdown.appendChild(option);
+        if (!amount || !date || !categoryId || !description) {
+            alert('Please fill in all fields.');
+            return;
+        }
+
+        const method = expenseId ? 'PUT' : 'POST';
+        const url = expenseId ? `${API_BASE_URL}/expenses/${expenseId}` : `${API_BASE_URL}/expenses`;
+
+        $.ajax({
+            url: url,
+            method: method,
+            contentType: 'application/json',
+            data: JSON.stringify({ amount, date, category_id: categoryId, description }),
+            success: function () {
+                alert(`Expense ${expenseId ? 'updated' : 'added'} successfully!`);
+                fetchExpenses();
+                $('#expense-form')[0].reset();
+                $('#expense-id').val(''); // Reset hidden input
+                $('#expense-form button[type="submit"]').text('Add Expense'); // Reset button text
+            },
+            error: function () {
+                alert(`Failed to ${expenseId ? 'update' : 'add'} expense.`);
+            }
+        });
+    }
+
+    // Edit Expense
+    $(document).on('click', '.edit-expense-btn', function () {
+        const expenseId = $(this).data('id');
+        $.get(`${API_BASE_URL}/expenses/${expenseId}`, function (data) {
+            $('#expense-id').val(data.id);
+            $('#expense-amount').val(data.amount);
+            $('#expense-date').val(data.date);
+            $('#expense-category').val(data.category_id);
+            $('#expense-description').val(data.description);
+            $('#expense-form button[type="submit"]').text('Update Expense');
+        });
+    });
+
+    // Delete Expense
+    $(document).on('click', '.delete-expense-btn', function () {
+        const expenseId = $(this).data('id');
+        if (confirm('Are you sure you want to delete this expense?')) {
+            $.ajax({
+                url: `${API_BASE_URL}/expenses/${expenseId}`,
+                method: 'DELETE',
+                success: function () {
+                    alert('Expense deleted successfully!');
+                    fetchExpenses();
+                },
+                error: function () {
+                    alert('Failed to delete expense.');
+                }
             });
-        })
-        .catch(error => console.error("Error loading categories for budget:", error));
-}
+        }
+    });
 
-// Set or Update Budget
-document.getElementById('set-budget-form').addEventListener('submit', function(event) {
-    event.preventDefault();
+    // Fetch Budgets
+    function fetchBudgets() {
+        $.get(`${API_BASE_URL}/budgets`, function (data) {
+            $('#budgets-table-body').empty();
 
-    const category = document.getElementById('budget-category').value;
-    const limit = document.getElementById('budget-limit').value;
+            if (data.budgets.length === 0) {
+                $('#budgets-table-body').append('<tr><td colspan="4">No budgets set</td></tr>');
+            } else {
+                data.budgets.forEach(budget => {
+                    $('#budgets-table-body').append(`
+                        <tr>
+                            <td>${budget.category_name}</td>
+                            <td>$${budget.limit_amount}</td>
+                            <td>${budget.status}</td>
+                            <td>
+                                <button class="edit-budget-btn" data-id="${budget.id}" data-category-id="${budget.category_id}" data-limit="${budget.limit_amount}">Edit</button>
+                                <button class="delete-budget-btn" data-id="${budget.id}">Delete</button>
+                            </td>
+                        </tr>
+                    `);
+                });
+            }
+        }).fail(function () {
+            alert('Failed to fetch budgets');
+        });
+    }
 
-    fetch(`${baseURL}/budgets`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            category_id: category,
-            limit_amount: limit
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log("Budget set:", data);
-        updateBudgetStatus(); // Reload budget status after setting budget
-        event.target.reset(); // Reset form
-    })
-    .catch(error => console.error("Error setting budget:", error));
+    // Set or Update Budget
+    function setOrUpdateBudget() {
+        const budgetId = $('#budget-id').val(); // Hidden input for budget ID
+        const categoryId = $('#budget-category').val();
+        const limitAmount = $('#budget-limit').val();
+
+        if (!categoryId || !limitAmount) {
+            alert('Please fill in all fields.');
+            return;
+        }
+
+        const method = budgetId ? 'PUT' : 'POST';
+        const url = budgetId ? `${API_BASE_URL}/budgets/${budgetId}` : `${API_BASE_URL}/budgets`;
+
+        $.ajax({
+            url: url,
+            method: method,
+            contentType: 'application/json',
+            data: JSON.stringify({ category_id: categoryId, limit_amount: limitAmount }),
+            success: function () {
+                alert(`Budget ${budgetId ? 'updated' : 'set'} successfully!`);
+                fetchBudgets();
+                $('#budget-form')[0].reset();
+                $('#budget-id').val(''); // Reset hidden input
+                $('#budget-form button[type="submit"]').text('Set Budget'); // Reset button text
+            },
+            error: function () {
+                alert(`Failed to ${budgetId ? 'update' : 'set'} budget.`);
+            }
+        });
+    }
+
+    // Edit Budget
+    $(document).on('click', '.edit-budget-btn', function () {
+        const budgetId = $(this).data('id');
+        const categoryId = $(this).data('category-id');
+        const limitAmount = $(this).data('limit');
+        $('#budget-id').val(budgetId);
+        $('#budget-category').val(categoryId);
+        $('#budget-limit').val(limitAmount);
+        $('#budget-form button[type="submit"]').text('Update Budget');
+    });
+
+    // Delete Budget
+    $(document).on('click', '.delete-budget-btn', function () {
+        const budgetId = $(this).data('id');
+        if (confirm('Are you sure you want to delete this budget?')) {
+            $.ajax({
+                url: `${API_BASE_URL}/budgets/${budgetId}`,
+                method: 'DELETE',
+                success: function () {
+                    alert('Budget deleted successfully!');
+                    fetchBudgets();
+                },
+                error: function () {
+                    alert('Failed to delete budget.');
+                }
+            });
+        }
+    });
 });
-
-loadBudgetCategories();
-
-// Load Budgets into the Summary Section
-function updateBudgetStatus() {
-    fetch(`${baseURL}/budgets`)
-        .then(response => response.json())
-        .then(data => {
-            const budgetSummary = document.getElementById("budget-summary");
-            budgetSummary.innerHTML = ""; // Clear previous content
-
-            // Loop through each budget and display the budget status
-            data.budgets.forEach(budget => {
-                const div = document.createElement("div");
-                div.classList.add("budget-status");
-
-                const statusClass = budget.status === "Over Budget" ? "over-budget" : "within-budget";
-
-                div.innerHTML = `
-                    <strong>${budget.category_name}</strong>: 
-                    Budget Limit: ${budget.limit_amount} | 
-                    Total Spent: ${budget.total_spent} | 
-                    <span class="${statusClass}">${budget.status}</span>
-                `;
-
-                budgetSummary.appendChild(div);
-            });
-        })
-        .catch(error => console.error("Error fetching budget status:", error));
-}
-
-// Initialize Data on Page Load
-loadCategories();
-loadExpenses();
-updateBudgetStatus();

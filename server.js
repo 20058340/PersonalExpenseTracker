@@ -1,12 +1,10 @@
-//test for git
-
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app = express();
-const PORT = 3000;
+const PORT = 4000;
 
 // Middleware
 app.use(bodyParser.json());
@@ -21,6 +19,13 @@ const db = new sqlite3.Database('./expense_tracker.db', (err) => {
     }
 });
 
+const corsOptions = {
+    origin: 'http://127.0.0.1:5500',  // Allow only this origin
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type']
+};
+app.use(cors(corsOptions));
+
 // Initialize tables
 db.serialize(() => {
     db.run(`CREATE TABLE IF NOT EXISTS categories (
@@ -33,13 +38,13 @@ db.serialize(() => {
         amount REAL NOT NULL,
         date TEXT NOT NULL,
         category_id INTEGER,
-        description TEXT,
+        description TEXT DEFAULT '',
         FOREIGN KEY (category_id) REFERENCES categories (id)
     )`);
 
     db.run(`CREATE TABLE IF NOT EXISTS budgets (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        category_id INTEGER,
+        category_id INTEGER UNIQUE,
         limit_amount REAL NOT NULL,
         FOREIGN KEY (category_id) REFERENCES categories (id)
     )`);
@@ -47,177 +52,240 @@ db.serialize(() => {
     console.log('Tables created successfully (or already exist).');
 });
 
-// ==================
-// CRUD Operations
-// ==================
+// Routes
+app.get('/', (req, res) => {
+    res.send('Welcome to the Personal Expense Tracker API!');
+});
 
-// ---- CATEGORIES ----
-
-// Get all categories
+// Categories Routes
 app.get('/categories', (req, res) => {
-    db.all('SELECT * FROM categories', [], (err, rows) => {
+    const sql = 'SELECT * FROM categories';
+    db.all(sql, [], (err, rows) => {
         if (err) {
-            res.status(500).json({ error: 'Failed to retrieve categories.' });
-        } else {
-            res.json({ categories: rows });
+            console.error('Error fetching categories:', err.message);
+            return res.status(500).json({ error: 'Failed to retrieve categories.' });
         }
+        res.json({ categories: rows });
     });
 });
 
-// Add a new category
 app.post('/categories', (req, res) => {
     const { name } = req.body;
     if (!name) {
         return res.status(400).json({ error: 'Category name is required.' });
     }
-    db.run('INSERT INTO categories (name) VALUES (?)', [name], function (err) {
+
+    const sql = 'INSERT INTO categories (name) VALUES (?)';
+    db.run(sql, [name], function (err) {
         if (err) {
-            res.status(500).json({ error: 'Failed to add category.' });
-        } else {
-            res.status(201).json({ id: this.lastID, name });
+            console.error('Error adding category:', err.message);
+            return res.status(500).json({ error: 'Failed to add category.' });
         }
+        res.status(201).json({ id: this.lastID, name });
     });
 });
 
-// ---- EXPENSES ----
+app.delete('/categories/:id', (req, res) => {
+    const categoryId = req.params.id;
+    db.run('DELETE FROM categories WHERE id = ?', [categoryId], function (err) {
+        if (err) {
+            console.error('Error deleting category:', err.message);
+            return res.status(500).json({ error: 'Failed to delete category.' });
+        }
+        if (this.changes === 0) {
+            return res.status(404).json({ error: 'Category not found.' });
+        }
+        res.status(200).send('Category deleted successfully.');
+    });
+});
 
-// Get all expenses (with category names)
+// Expenses Routes
 app.get('/expenses', (req, res) => {
     const sql = `
         SELECT e.id, e.amount, e.date, e.description, c.name as category_name
         FROM expenses e
-        JOIN categories c ON e.category_id = c.id`;
+        JOIN categories c ON e.category_id = c.id
+    `;
     db.all(sql, [], (err, rows) => {
         if (err) {
-            res.status(500).json({ error: 'Failed to retrieve expenses.' });
-        } else {
-            res.json({ expenses: rows });
+            console.error('Error fetching expenses:', err.message);
+            return res.status(500).json({ error: 'Failed to retrieve expenses.' });
         }
+        res.json({ expenses: rows });
+    });
+});
+
+// Get a single expense by ID
+app.get('/expenses/:id', (req, res) => {
+    const expenseId = req.params.id;
+    const sql = `
+        SELECT e.id, e.amount, e.date, e.description, c.name as category_name
+        FROM expenses e
+        JOIN categories c ON e.category_id = c.id
+        WHERE e.id = ?
+    `;
+    db.get(sql, [expenseId], (err, row) => {
+        if (err) {
+            console.error('Error fetching expense:', err.message);
+            return res.status(500).json({ error: 'Failed to retrieve expense.' });
+        }
+        if (!row) {
+            return res.status(404).json({ error: 'Expense not found.' });
+        }
+        res.json(row);
     });
 });
 
 // Add a new expense
 app.post('/expenses', (req, res) => {
     const { amount, date, category_id, description } = req.body;
+
     if (!amount || !date || !category_id) {
         return res.status(400).json({ error: 'Amount, date, and category ID are required.' });
     }
+
     const sql = 'INSERT INTO expenses (amount, date, category_id, description) VALUES (?, ?, ?, ?)';
-    db.run(sql, [amount, date, category_id, description], function (err) {
+    db.run(sql, [amount, date, category_id, description || ''], function (err) {
         if (err) {
-            res.status(500).json({ error: 'Failed to add expense.' });
-        } else {
-            res.status(201).json({ id: this.lastID, amount, date, category_id, description });
+            console.error('Error adding expense:', err.message);
+            return res.status(500).json({ error: 'Failed to add expense.' });
         }
+        res.status(201).json({ id: this.lastID, amount, date, category_id, description });
     });
 });
 
-// Update an expense
+// Update an expense by ID
 app.put('/expenses/:id', (req, res) => {
-    const { id } = req.params;
+    const expenseId = req.params.id;
     const { amount, date, category_id, description } = req.body;
-    
+
+    if (!amount || !date || !category_id) {
+        return res.status(400).json({ error: 'Amount, date, and category ID are required.' });
+    }
 
     const sql = `
         UPDATE expenses
         SET amount = ?, date = ?, category_id = ?, description = ?
-        WHERE id = ?`;
-
-    db.run(sql, [amount, date, category_id, description, id], function(err) {
+        WHERE id = ?
+    `;
+    db.run(sql, [amount, date, category_id, description || '', expenseId], function (err) {
         if (err) {
-            return res.status(500).json({ error: "Failed to update expenses" });
+            console.error('Error updating expense:', err.message);
+            return res.status(500).json({ error: 'Failed to update expense.' });
         }
-        res.json({ message: 'Expense updated successfully', id });
+        if (this.changes === 0) {
+            return res.status(404).json({ error: 'Expense not found.' });
+        }
+        res.json({ message: 'Expense updated successfully.' });
     });
 });
 
-
-// Delete an expense
+// Delete an expense by ID
 app.delete('/expenses/:id', (req, res) => {
-    const { id } = req.params;
-    const sql = 'DELETE FROM expenses WHERE id = ?';
-    db.run(sql, [id], function (err) {
+    const expenseId = req.params.id;
+
+    db.run('DELETE FROM expenses WHERE id = ?', [expenseId], function (err) {
         if (err) {
-            res.status(500).json({ error: 'Failed to delete expense.' });
-        } else if (this.changes === 0) {
-            res.status(404).json({ error: 'Expense not found.' });
-        } else {
-            res.json({ message: 'Expense deleted successfully.' });
+            console.error('Error deleting expense:', err.message);
+            return res.status(500).json({ error: 'Failed to delete expense.' });
         }
+        if (this.changes === 0) {
+            return res.status(404).json({ error: 'Expense not found.' });
+        }
+        res.status(200).json({ message: 'Expense deleted successfully.' });
     });
 });
 
-// ---- BUDGETS ----
-
-
-// Get all budgets
-
+// Budgets Routes
 app.get('/budgets', (req, res) => {
     const sql = `
-        SELECT b.id, b.category_id, b.limit_amount, c.name as category_name
+        SELECT 
+            b.id, 
+            b.category_id, 
+            b.limit_amount, 
+            c.name as category_name,
+            IFNULL(SUM(e.amount), 0) AS total_spent,
+            CASE 
+                WHEN IFNULL(SUM(e.amount), 0) > b.limit_amount THEN 'Over Budget'
+                ELSE 'Under Budget'
+            END AS status
         FROM budgets b
-        JOIN categories c ON b.category_id = c.id`;
+        LEFT JOIN expenses e ON b.category_id = e.category_id
+        LEFT JOIN categories c ON b.category_id = c.id
+        GROUP BY b.category_id
+    `;
 
-        //from here
-
-    db.all(sql, [], (err, budgets) => {
+    db.all(sql, [], (err, rows) => {
         if (err) {
-            console.error("Error fetching budgets: ", err.message); // Log error message
+            console.error('Error fetching budgets:', err.message);
             return res.status(500).json({ error: 'Failed to retrieve budgets.' });
         }
-
-        // Now, calculate the total expenses for each category
-        budgets.forEach(budget => {
-            const categoryId = budget.category_id;
-            const expenseSql = `
-                SELECT SUM(amount) AS total_spent
-                FROM expenses
-                WHERE category_id = ?`;
-
-            db.get(expenseSql, [categoryId], (err, row) => {
-                if (err) {
-                    console.error("Error fetching expenses for category " + categoryId + ": ", err.message);
-                    return res.status(500).json({ error: 'Failed to calculate total expenses.' });
-                }
-
-                // Assign total spent to the budget
-                budget.total_spent = row.total_spent || 0; // If no expenses, set to 0
-                budget.status = budget.total_spent > budget.limit_amount ? 'Over Budget' : 'Within Budget';
-            });
-        });
-
-        // Return the budgets with total expenses and status
-        res.json({ budgets });
+        res.json({ budgets: rows });
     });
 });
 
-
-
-
-// Set or Update a Budget
 app.post('/budgets', (req, res) => {
     const { category_id, limit_amount } = req.body;
+
     if (!category_id || !limit_amount) {
         return res.status(400).json({ error: 'Category ID and limit amount are required.' });
     }
 
     const sql = `
-        INSERT INTO budgets (category_id, limit_amount)
+        INSERT INTO budgets (category_id, limit_amount) 
         VALUES (?, ?)
-        ON CONFLICT(category_id) DO UPDATE SET limit_amount = excluded.limit_amount`;
+        ON CONFLICT(category_id) 
+        DO UPDATE SET limit_amount = excluded.limit_amount
+    `;
 
-    db.run(sql, [category_id, limit_amount], function(err) {
+    db.run(sql, [category_id, limit_amount], function (err) {
         if (err) {
-            return res.status(500).json({ error: err.message });
+            console.error('Error adding/updating budget:', err.message);
+            return res.status(500).json({ error: 'Failed to set or update budget.' });
         }
-        res.status(201).json({ message: 'Budget set or updated successfully.' });
+        res.status(201).json({ category_id, limit_amount });
     });
 });
 
+// DELETE budget
+app.delete('/budgets/:id', (req, res) => {
+    const budgetId = parseInt(req.params.id);
+    const sql = 'DELETE FROM budgets WHERE id = ?';
+    db.run(sql, [budgetId], function (err) {
+        if (err) {
+            console.error('Error deleting budget:', err.message);
+            return res.status(500).json({ error: 'Failed to delete budget.' });
+        }
+        if (this.changes === 0) {
+            return res.status(404).json({ error: 'Budget not found.' });
+        }
+        res.status(200).send('Budget deleted successfully.');
+    });
+});
 
-// ==================
-// Start the Server
-// ==================
+// PUT (update) budget
+app.put('/budgets/:id', (req, res) => {
+    const budgetId = parseInt(req.params.id);
+    const { limit_amount } = req.body;
+
+    if (!limit_amount) {
+        return res.status(400).json({ error: 'Limit amount is required.' });
+    }
+
+    const sql = 'UPDATE budgets SET limit_amount = ? WHERE id = ?';
+    db.run(sql, [limit_amount, budgetId], function (err) {
+        if (err) {
+            console.error('Error updating budget:', err.message);
+            return res.status(500).json({ error: 'Failed to update budget.' });
+        }
+        if (this.changes === 0) {
+            return res.status(404).json({ error: 'Budget not found.' });
+        }
+        res.status(200).json({ message: 'Budget updated successfully.' });
+    });
+});
+
+// Start the server
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server running on http://localhost:${PORT}`);
 });

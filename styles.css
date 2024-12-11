@@ -1,67 +1,175 @@
 /* General Styling */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f7fc;
+    background-color: #f5f7fa;
     color: #333;
+    line-height: 1.6;
 }
 
 h1 {
     text-align: center;
-    margin-top: 20px;
-    font-size: 2em;
-    color: #4e73df;
+    margin-top: 50px;
+    font-size: 3em;
+    color: #34495e;
 }
 
 /* Form Section */
-#expense-form {
+#expense-form, #category-form, #budget-form {
     background-color: #fff;
-    padding: 20px;
+    padding: 25px;
     margin: 20px auto;
-    width: 80%;
+    width: 90%;
     max-width: 600px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-#expense-form h2 {
+#expense-form h2, #category-form h2, #budget-form h2 {
     font-size: 1.5em;
-    margin-bottom: 20px;
-    color: #333;
+    margin-bottom: 15px;
+    text-align: center;
+    color: #2980b9;
+    border-bottom: 2px solid #2980b9;
+    padding-bottom: 8px;
 }
 
-label {
-    font-size: 1em;
-    margin-bottom: 5px;
-    display: block;
-    color: #555;
-}
-
+/* Form Fields */
 input[type="number"],
 input[type="date"],
 input[type="text"],
 select {
     width: 100%;
-    padding: 8px;
-    margin: 10px 0 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #bdc3c7;
+    border-radius: 6px;
+    font-size: 1em;
+    background-color: #ecf0f1;
+    transition: border-color 0.3s ease;
 }
 
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #2980b9;
+    background-color: #fff;
+}
+
+/* Buttons */
 button {
-    background-color: #4e73df;
+    background-color: #2980b9;
     color: white;
-    padding: 10px 20px;
+    padding: 10px 18px;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
     font-size: 1em;
+    transition: background-color 0.3s ease-in-out;
+    margin-top: 12px;
 }
 
 button:hover {
-    background-color: #2e59d9;
+    background-color: #3498db;
+}
+
+button:focus {
+    outline: none;
+}
+
+/* category Section */
+#categories-section {
+    background-color: #fff;
+    padding: 20px;
+    margin: 20px auto;
+    width: 90%;
+    max-width: 900px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#categories-section h2 {
+    font-size: 1.6em;
+    text-align: center;
+    color: #2980b9;
+}
+
+
+
+
+/* Categories List Section */
+
+
+#categories-list {
+    list-style: none;
+    padding: 900;
+    margin: 15px 25px;
+    align-items: center;
+}
+
+#categories-list li {
+    background-color: #ecf0f1;
+    padding: 15px;
+    margin: 10px 0px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.1em;
+    
+    
+}
+
+#categories-list li:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Actions for Categories */
+#categories-list .actions {
+    display: flex;
+    gap: 10px; /* Adds space between buttons */
+}
+
+/* Delete Button for Categories */
+#categories-list .delete-btn {
+    background-color: #ff6f61;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease;
+}
+
+#categories-list .delete-btn:hover {
+    background-color: #e65c52;
+}
+
+/* Additional Styles for Consistency */
+#categories-list .delete-btn:focus {
+    outline: none;
+    box-shadow: 0 0 6px rgba(255, 111, 97, 0.6);
+}
+
+
+/* Expenses Section */
+#expenses-section {
+    background-color: #fff;
+    padding: 20px;
+    margin: 20px auto;
+    width: 90%;
+    max-width: 900px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#expenses-section h2 {
+    font-size: 1.6em;
+    text-align: center;
+    color: #2980b9;
 }
 
 /* Expenses Table Section */
@@ -110,76 +218,218 @@ button:hover {
     background-color: #e65c52;
 }
 
-/* Budget Section */
-#budget-section {
+
+/* Expense Actions */
+#expenses-list td .actions {
+    display: flex;
+    gap: 10px;
+}
+
+#expenses-list td button {
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease;
+}
+
+#expenses-list .edit-btn {
+    background-color: #27ae60;
+    color: white;
+}
+
+#expenses-list .edit-btn:hover {
+    background-color: #2ecc71;
+}
+
+#expenses-list .delete-btn {
+    background-color: #e74c3c;
+    color: white;
+}
+
+#expenses-list .delete-btn:hover {
+    background-color: #c0392b;
+}
+
+
+/* Budgets Section */
+#budgets-section {
     background-color: #fff;
+    padding: 20px;
+    margin: 20px auto;
+    width: 90%;
+    max-width: 900px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#budgets-section h2 {
+    font-size: 1.6em;
+    text-align: center;
+    color: #2980b9;
+}
+
+/* Budgets Table Section */
+#budgets-list {
     margin: 20px auto;
     width: 80%;
     max-width: 900px;
+    background-color: #fff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-#budget-section h2 {
-    font-size: 1.5em;
-    color: #333;
+#budgets-list table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
 }
 
-#budget-summary {
-    margin-top: 20px;
-    font-size: 1.1em;
+#budgets-list table th,
+#budgets-list table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+#budgets-list table th {
+    background-color: #f1f1f1;
     color: #555;
 }
 
-#budget-summary div {
-    background-color: #f9f9f9;
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 4px;
+#budgets-list table td {
+    font-size: 1em;
 }
 
-#budget-summary div strong {
-    color: #4e73df;
+/* Budget Actions */
+#budgets-list td .actions {
+    display: flex;
+    gap: 10px;
 }
+
+#budgets-list td button {
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease;
+}
+
+#budgets-list .edit-btn {
+    background-color: #27ae60;
+    color: white;
+}
+
+#budgets-list .edit-btn:hover {
+    background-color: #2ecc71;
+}
+
+#budgets-list .delete-btn {
+    background-color: #e74c3c;
+    color: white;
+}
+
+#budgets-list .delete-btn:hover {
+    background-color: #c0392b;
+}
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+}
+
+#app {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+    background-color: #f1f1f1;
+}
+
+.actions button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.actions button:hover {
+    background-color: #e53935;
+}
+
+.actions .edit-budget-btn {
+    background-color: #ff9800;
+    color: white;
+}
+
+.actions .edit-budget-btn:hover {
+    background-color: #fb8c00;
+}
+
+
 
 /* Mobile Responsiveness */
 @media screen and (max-width: 768px) {
     #expense-form,
-    #expense-list,
+    #category-form,
+    #budget-form,
+    #categories-section,
+    #expenses-section,
     #budget-section {
         width: 95%;
         margin: 10px auto;
     }
 
-    table {
-        font-size: 0.9em;
-    }
-
     button {
-        width: 100%;
-        padding: 12px;
         font-size: 1.1em;
+        padding: 12px 18px;
     }
-}
-/* Budget Status Styling */
-.budget-status {
-    background-color: #f9f9f9;
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 4px;
+
+    h1 {
+        font-size: 2.5em;
+    }
+
+    h2 {
+        font-size: 1.4em;
+    }
+
+    #expenses-list th, #expenses-list td {
+        font-size: 1em;
+        padding: 8px 12px;
+    }
+
+    #expenses-list button {
+        font-size: 1em;
+        padding: 8px 12px;
+    }
+
+    #budgets-list li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #budgets-list .actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
 }
 
-.budget-status strong {
-    color: #4e73df;
-}
 
-.within-budget {
-    color: green;
-    font-weight: bold;
-}
-
-.over-budget {
-    color: red;
-    font-weight: bold;
-}
