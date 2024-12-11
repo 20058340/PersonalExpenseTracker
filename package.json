@@ -16,6 +16,8 @@
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/plugin-transform-runtime": "^7.25.9",
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.26.3",
     "babel-jest": "^29.7.0",
@@ -24,5 +26,13 @@
     "jquery": "^3.7.1",
     "jsdom": "^25.0.1"
   },
-  "description": ""
+  "jest": {
+    "testEnvironment": "jsdom",
+    "transform": {
+      "^.+\\.js$": "babel-jest"
+    },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!(jquery)/)"
+    ]
+  }
 }
