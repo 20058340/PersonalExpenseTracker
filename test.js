@@ -92,3 +92,36 @@ describe('Expense Tracker Application', () => {
             });
         });
         await app.editExpense(1);
+
+        expect($('#expense-id').val()).toBe('1');
+        expect($('#expense-amount').val()).toBe('50');
+        expect($('#expense-category').val()).toBe('Food');
+        expect($('#expense-description').val()).toBe('Dinner');
+    });
+
+    // Test fetching expenses
+    it('should fetch expenses and display them', async () => {
+    
+        $.get.mockImplementationOnce((url, callback) => {
+            callback({ expenses: [{ id: 1, amount: 100, date: '2024-12-10', category_name: 'Food', description: 'Lunch' }] });
+        });
+
+        await app.fetchExpenses();
+
+        expect($('#expense-id').val()).toBe('1');
+        expect($('#expense-amount').val()).toBe('50');
+        expect($('#expense-category').val()).toBe('Food');
+        expect($('#expense-description').val()).toBe('Dinner');
+    });
+
+    // Test fetching expenses
+    it('should fetch expenses and display them', async () => {
+        
+        $.get.mockImplementationOnce((url, callback) => {
+            callback({ expenses: [{ id: 1, amount: 100, date: '2024-12-10', category_name: 'Food', description: 'Lunch' }] });
+        });
+        await app.fetchExpenses();
+
+        expect($('#expense-table-body').html()).toContain('100');
+        expect($('#expense-table-body').html()).toContain('Lunch');
+    });
