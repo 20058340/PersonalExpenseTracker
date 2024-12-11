@@ -1,4 +1,4 @@
-// Base URL for API requests
+
 const baseURL = "http://localhost:4000";
 
 // Initial fetch
