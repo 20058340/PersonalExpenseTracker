@@ -27,29 +27,29 @@ function fetchCategories() {
 
 }
 
-// Add Expense - Handling Form Submission
-document.getElementById("add-expense-form").addEventListener("submit", function (event) {
-    event.preventDefault();
+// Add Category
+function addCategory() {
+    const categoryName = $('#category-name').val();
+    if (!categoryName) {
+        alert('Please enter a category name.');
+        return;
+    }
 
-    const amount = parseFloat(document.getElementById("expense-amount").value);
-    const date = document.getElementById("expense-date").value;
-    const category = parseInt(document.getElementById("expense-category").value);
-    const description = document.getElementById("expense-description").value;
-
-    fetch(`${baseURL}/expenses`, {
+    $.ajax({
+        url: `${API_BASE_URL}/categories`,
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount, date, category_id: category, description }),
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Expense added:", data);
-            loadExpenses();
-            updateBudgetStatus();
-            event.target.reset();
-        })
-        .catch(error => console.error("Error adding expense:", error));
-});
+        contentType: 'application/json',
+        data: JSON.stringify({ name: categoryName }),
+        success: function () {
+            alert('Category added successfully!');
+            fetchCategories();
+            $('#category-name').val('');
+        },
+        error: function () {
+            alert('Failed to add category.');
+        }
+    });
+}
 
 // Load Expenses into the Table
 function loadExpenses() {
