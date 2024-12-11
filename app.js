@@ -142,21 +142,18 @@ $(document).on('click', '.edit-expense-btn', function () {
         $('#expense-form button[type="submit"]').text('Update Expense');
     });
 });
-// jQuery-based Delete Expense
+// Delete Expense
 $(document).on('click', '.delete-expense-btn', function () {
     const expenseId = $(this).data('id');
-
     if (confirm('Are you sure you want to delete this expense?')) {
         $.ajax({
-            url: `${baseURL}/expenses/${expenseId}`,
+            url: `${API_BASE_URL}/expenses/${expenseId}`,
             method: 'DELETE',
             success: function () {
                 alert('Expense deleted successfully!');
-                loadExpenses(); // Refresh the expense list
-                updateBudgetStatus(); // Refresh the budget status
+                fetchExpenses();
             },
-            error: function (xhr) {
-                console.error('Error deleting expense:', xhr.responseText);
+            error: function () {
                 alert('Failed to delete expense.');
             }
         });
