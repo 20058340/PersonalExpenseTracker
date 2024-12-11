@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    const API_BASE_URL = 'http://localhost:4000';
+    const API_BASE_URL = 'https://20058340.github.io/PersonalExpenseTracker/';
 
     // Initial fetch
     fetchCategories();
