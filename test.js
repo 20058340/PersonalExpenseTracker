@@ -125,3 +125,23 @@ describe('Expense Tracker Application', () => {
         expect($('#expense-table-body').html()).toContain('100');
         expect($('#expense-table-body').html()).toContain('Lunch');
     });
+
+    // Test form submission button disable and enable
+    it('should disable submit button while submitting', async () => {
+        $('#expense-amount').val('100');
+        $('#expense-date').val('2024-12-10');
+        $('#expense-category').val('Food');
+        $('#expense-description').val('Lunch');
+
+        const submitButton = $('#expense-form button[type="submit"]');
+        submitButton.prop('disabled', false);
+
+        await app.addOrUpdateExpense();
+
+        expect(submitButton.prop('disabled')).toBe(true);
+
+        await app.completeSubmit(); 
+        expect(submitButton.prop('disabled')).toBe(false);
+    });
+
+});
