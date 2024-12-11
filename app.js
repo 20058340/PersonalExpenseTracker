@@ -160,32 +160,29 @@ $(document).on('click', '.delete-expense-btn', function () {
     }
 });
 
-// Load budgets and display in budget summary
-function updateBudgetStatus() {
-    fetch(`${baseURL}/budgets`)
-        .then(response => response.json())
-        .then(data => {
-            const budgetSummary = document.getElementById("budget-summary");
-            budgetSummary.innerHTML = "";
+// Fetch Budgets
+function fetchBudgets() {
+    $.get(`${API_BASE_URL}/budgets`, function (data) {
+        $('#budgets-table-body').empty();
 
+        if (data.budgets.length === 0) {
+            $('#budgets-table-body').append('<tr><td colspan="4">No budgets set</td></tr>');
+        } else {
             data.budgets.forEach(budget => {
-                const isOverBudget = budget.total_spent > budget.limit_amount;
-                const statusClass = isOverBudget ? "over-budget" : "within-budget";
-
-                const budgetDiv = document.createElement("li");
-                budgetDiv.classList.add("budget-item");
-
-                budgetDiv.innerHTML = `
-                    <strong>${budget.category_name}</strong>:
-                    Limit: ${budget.limit_amount} |
-                    Spent: ${budget.total_spent || 0} |
-                    <span class="${statusClass}">${isOverBudget ? "Over Budget" : "Within Budget"}</span>
-                    <button onclick="deleteBudget(${budget.id})">Delete</button>
-                `;
-
-                budgetSummary.appendChild(budgetDiv);
+                $('#budgets-table-body').append(`
+                    <tr>
+                        <td>${budget.category_name}</td>
+                        <td>$${budget.limit_amount}</td>
+                        <td>${budget.status}</td>
+                        <td>
+                            <button class="edit-budget-btn" data-id="${budget.id}" data-category-id="${budget.category_id}" data-limit="${budget.limit_amount}">Edit</button>
+                            <button class="delete-budget-btn" data-id="${budget.id}">Delete</button>
+                        </td>
+                    </tr>
+                `);
             });
-        })
-        .catch(error => console.error("Error loading budgets:", error));
+        }
+    }).fail(function () {
+        alert('Failed to fetch budgets');
+    });
 }
-
