@@ -201,7 +201,23 @@ function setOrUpdateBudget() {
     const method = budgetId ? 'PUT' : 'POST';
     const url = budgetId ? `${API_BASE_URL}/budgets/${budgetId}` : `${API_BASE_URL}/budgets`;
 
-    
+    $.ajax({
+        url: url,
+        method: method,
+        contentType: 'application/json',
+        data: JSON.stringify({ category_id: categoryId, limit_amount: limitAmount }),
+        success: function () {
+            alert(`Budget ${budgetId ? 'updated' : 'set'} successfully!`);
+            fetchBudgets();
+            $('#budget-form')[0].reset();
+            $('#budget-id').val(''); // Reset hidden input
+            $('#budget-form button[type="submit"]').text('Set Budget'); // Reset button text
+        },
+        error: function () {
+            alert(`Failed to ${budgetId ? 'update' : 'set'} budget.`);
+        }
+    });
+}
 
 
 
