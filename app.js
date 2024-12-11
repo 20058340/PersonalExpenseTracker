@@ -22,8 +22,18 @@ $(document).ready(function () {
         setOrUpdateBudget(); // Handles both setting and updating
     });
 
+    // Loading Indicator functions
+    function showLoadingIndicator() {
+        $('#loading-spinner').show();
+    }
+
+    function hideLoadingIndicator() {
+        $('#loading-spinner').hide();
+    }
+
     // Fetch Categories
     function fetchCategories() {
+        showLoadingIndicator();
         $.get(`${API_BASE_URL}/categories`, function (data) {
             $('#categories-list').empty();
             $('#expense-category, #budget-category').empty().append('<option value="">Select Category</option>');
@@ -42,8 +52,10 @@ $(document).ready(function () {
                     $('#budget-category').append(`<option value="${category.id}">${category.name}</option>`);
                 });
             }
+            hideLoadingIndicator();
         }).fail(function () {
             alert('Failed to fetch categories');
+            hideLoadingIndicator();
         });
     }
 
@@ -55,6 +67,7 @@ $(document).ready(function () {
             return;
         }
 
+        disableSubmitButton('#category-form button[type="submit"]');
         $.ajax({
             url: `${API_BASE_URL}/categories`,
             method: 'POST',
@@ -67,6 +80,9 @@ $(document).ready(function () {
             },
             error: function () {
                 alert('Failed to add category.');
+            },
+            complete: function () {
+                enableSubmitButton('#category-form button[type="submit"]');
             }
         });
     }
@@ -91,6 +107,7 @@ $(document).ready(function () {
 
     // Fetch Expenses
     function fetchExpenses() {
+        showLoadingIndicator();
         $.get(`${API_BASE_URL}/expenses`, function (data) {
             $('#expense-table-body').empty();
 
@@ -112,8 +129,10 @@ $(document).ready(function () {
                     `);
                 });
             }
+            hideLoadingIndicator();
         }).fail(function () {
             alert('Failed to fetch expenses');
+            hideLoadingIndicator();
         });
     }
 
@@ -125,11 +144,19 @@ $(document).ready(function () {
         const categoryId = $('#expense-category').val();
         const description = $('#expense-description').val();
 
+        // Validate inputs
         if (!amount || !date || !categoryId || !description) {
             alert('Please fill in all fields.');
             return;
         }
 
+        // Validate date format (example: YYYY-MM-DD)
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+            alert('Please enter a valid date in the format YYYY-MM-DD.');
+            return;
+        }
+
+        disableSubmitButton('#expense-form button[type="submit"]');
         const method = expenseId ? 'PUT' : 'POST';
         const url = expenseId ? `${API_BASE_URL}/expenses/${expenseId}` : `${API_BASE_URL}/expenses`;
 
@@ -142,11 +169,14 @@ $(document).ready(function () {
                 alert(`Expense ${expenseId ? 'updated' : 'added'} successfully!`);
                 fetchExpenses();
                 $('#expense-form')[0].reset();
-                $('#expense-id').val(''); // Reset hidden input
-                $('#expense-form button[type="submit"]').text('Add Expense'); // Reset button text
+                $('#expense-id').val('');
+                $('#expense-form button[type="submit"]').text('Add Expense');
             },
             error: function () {
                 alert(`Failed to ${expenseId ? 'update' : 'add'} expense.`);
+            },
+            complete: function () {
+                enableSubmitButton('#expense-form button[type="submit"]');
             }
         });
     }
@@ -184,6 +214,7 @@ $(document).ready(function () {
 
     // Fetch Budgets
     function fetchBudgets() {
+        showLoadingIndicator();
         $.get(`${API_BASE_URL}/budgets`, function (data) {
             $('#budgets-table-body').empty();
 
@@ -204,8 +235,10 @@ $(document).ready(function () {
                     `);
                 });
             }
+            hideLoadingIndicator();
         }).fail(function () {
             alert('Failed to fetch budgets');
+            hideLoadingIndicator();
         });
     }
 
@@ -220,6 +253,7 @@ $(document).ready(function () {
             return;
         }
 
+        disableSubmitButton('#budget-form button[type="submit"]');
         const method = budgetId ? 'PUT' : 'POST';
         const url = budgetId ? `${API_BASE_URL}/budgets/${budgetId}` : `${API_BASE_URL}/budgets`;
 
@@ -232,11 +266,14 @@ $(document).ready(function () {
                 alert(`Budget ${budgetId ? 'updated' : 'set'} successfully!`);
                 fetchBudgets();
                 $('#budget-form')[0].reset();
-                $('#budget-id').val(''); // Reset hidden input
-                $('#budget-form button[type="submit"]').text('Set Budget'); // Reset button text
+                $('#budget-id').val('');
+                $('#budget-form button[type="submit"]').text('Set Budget');
             },
             error: function () {
                 alert(`Failed to ${budgetId ? 'update' : 'set'} budget.`);
+            },
+            complete: function () {
+                enableSubmitButton('#budget-form button[type="submit"]');
             }
         });
     }
@@ -264,10 +301,19 @@ $(document).ready(function () {
                     fetchBudgets();
                 },
                 error: function () {
-
                     alert('Failed to delete budget.');
                 }
             });
         }
     });
+
+    // Disable Submit Button
+    function disableSubmitButton(selector) {
+        $(selector).attr('disabled', true);
+    }
+
+    // Enable Submit Button
+    function enableSubmitButton(selector) {
+        $(selector).attr('disabled', false);
+    }
 });
