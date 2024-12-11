@@ -97,55 +97,38 @@ function fetchExpenses() {
     });
 }
 // Function to edit an expense
-function editExpense(id) {
-    fetch(`${baseURL}/expenses/${id}`)
-        .then(response => response.json())
-        .then(expense => {
-            // Pre-fill the form with the current expense data
-            document.getElementById('expense-amount').value = expense.amount;
-            document.getElementById('expense-date').value = expense.date;
-            document.getElementById('expense-category').value = expense.category_id;
-            document.getElementById('expense-description').value = expense.description;
+function addOrUpdateExpense() {
+    const expenseId = $('#expense-id').val(); 
+    const amount = $('#expense-amount').val();
+    const date = $('#expense-date').val();
+    const categoryId = $('#expense-category').val();
+    const description = $('#expense-description').val();
 
-            // Change the form button to "Update"
-            const submitButton = document.querySelector("#add-expense-form button");
-            submitButton.textContent = "Update Expense";
+    if (!amount || !date || !categoryId || !description) {
+        alert('Please fill in all fields.');
+        return;
+    }
 
-            document.getElementById('add-expense-form').onsubmit = function (event) {
-                event.preventDefault();
+    const method = expenseId ? 'PUT' : 'POST';
+    const url = expenseId ? `${API_BASE_URL}/expenses/${expenseId}` : `${API_BASE_URL}/expenses`;
 
-                // Get the updated values from the form
-                const updatedAmount = document.getElementById('expense-amount').value;
-                const updatedDate = document.getElementById('expense-date').value;
-                const updatedCategory = document.getElementById('expense-category').value;
-                const updatedDescription = document.getElementById('expense-description').value;
-
-                // Send the updated expense data to the server
-                fetch(`${baseURL}/expenses/${id}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        amount: updatedAmount,
-                        date: updatedDate,
-                        category_id: updatedCategory,
-                        description: updatedDescription
-                    })
-                })
-                    .then(() => {
-                        loadExpenses();
-                        updateBudgetStatus();
-
-                        // Reset form and button text
-                        document.getElementById('add-expense-form').reset();
-                        submitButton.textContent = "Add Expense";
-                        document.getElementById('add-expense-form').onsubmit = null;
-                    })
-                    .catch(error => console.error("Error updating expense:", error));
-            };
-        })
-        .catch(error => console.error("Error fetching expense data:", error));
+    $.ajax({
+        url: url,
+        method: method,
+        contentType: 'application/json',
+        data: JSON.stringify({ amount, date, category_id: categoryId, description }),
+        success: function () {
+            alert(`Expense ${expenseId ? 'updated' : 'added'} successfully!`);
+            fetchExpenses();
+            $('#expense-form')[0].reset();
+            $('#expense-id').val(''); // Reset hidden input
+            $('#expense-form button[type="submit"]').text('Add Expense'); // Reset button text
+        },
+        error: function () {
+            alert(`Failed to ${expenseId ? 'update' : 'add'} expense.`);
+        }
+    });
 }
-
 // jQuery-based Delete Expense
 $(document).on('click', '.delete-expense-btn', function () {
     const expenseId = $(this).data('id');
