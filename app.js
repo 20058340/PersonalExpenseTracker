@@ -1,12 +1,12 @@
 $(document).ready(function () {
-    const baseURL = "http://localhost:4000";
+    const API_BASE_URL = 'http://localhost:4000';
 
-// Initial fetch
+    // Initial fetch
     fetchCategories();
     fetchExpenses();
     fetchBudgets();
 
-// Event Listeners
+    // Event Listeners
     $('#category-form').submit(function (e) {
         e.preventDefault();
         addCategory();
@@ -22,13 +22,12 @@ $(document).ready(function () {
         setOrUpdateBudget(); // Handles both setting and updating
     });
 
-
-// Fetch Categories
+    // Fetch Categories
     function fetchCategories() {
         $.get(`${API_BASE_URL}/categories`, function (data) {
             $('#categories-list').empty();
             $('#expense-category, #budget-category').empty().append('<option value="">Select Category</option>');
-        
+
             if (data.categories.length === 0) {
                 $('#categories-list').append('<li>No categories available</li>');
             } else {
@@ -46,10 +45,9 @@ $(document).ready(function () {
         }).fail(function () {
             alert('Failed to fetch categories');
         });
-
     }
 
-// Add Category
+    // Add Category
     function addCategory() {
         const categoryName = $('#category-name').val();
         if (!categoryName) {
@@ -73,7 +71,7 @@ $(document).ready(function () {
         });
     }
 
-// Delete Category
+    // Delete Category
     $(document).on('click', '.delete-category-btn', function () {
         const categoryId = $(this).data('id');
         if (confirm('Are you sure you want to delete this category?')) {
@@ -91,7 +89,7 @@ $(document).ready(function () {
         }
     });
 
-// Fetch Expenses
+    // Fetch Expenses
     function fetchExpenses() {
         $.get(`${API_BASE_URL}/expenses`, function (data) {
             $('#expense-table-body').empty();
@@ -118,9 +116,10 @@ $(document).ready(function () {
             alert('Failed to fetch expenses');
         });
     }
-// Function to edit an expense
+
+    // Add or Update Expense
     function addOrUpdateExpense() {
-        const expenseId = $('#expense-id').val(); 
+        const expenseId = $('#expense-id').val(); // Hidden input for expense ID
         const amount = $('#expense-amount').val();
         const date = $('#expense-date').val();
         const categoryId = $('#expense-category').val();
@@ -152,7 +151,7 @@ $(document).ready(function () {
         });
     }
 
-// Edit Expense
+    // Edit Expense
     $(document).on('click', '.edit-expense-btn', function () {
         const expenseId = $(this).data('id');
         $.get(`${API_BASE_URL}/expenses/${expenseId}`, function (data) {
@@ -164,7 +163,8 @@ $(document).ready(function () {
             $('#expense-form button[type="submit"]').text('Update Expense');
         });
     });
-// Delete Expense
+
+    // Delete Expense
     $(document).on('click', '.delete-expense-btn', function () {
         const expenseId = $(this).data('id');
         if (confirm('Are you sure you want to delete this expense?')) {
@@ -182,7 +182,7 @@ $(document).ready(function () {
         }
     });
 
-// Fetch Budgets
+    // Fetch Budgets
     function fetchBudgets() {
         $.get(`${API_BASE_URL}/budgets`, function (data) {
             $('#budgets-table-body').empty();
@@ -209,7 +209,7 @@ $(document).ready(function () {
         });
     }
 
-// Set or Update Budget
+    // Set or Update Budget
     function setOrUpdateBudget() {
         const budgetId = $('#budget-id').val(); // Hidden input for budget ID
         const categoryId = $('#budget-category').val();
@@ -241,7 +241,7 @@ $(document).ready(function () {
         });
     }
 
-// Edit Budget
+    // Edit Budget
     $(document).on('click', '.edit-budget-btn', function () {
         const budgetId = $(this).data('id');
         const categoryId = $(this).data('category-id');
@@ -252,7 +252,7 @@ $(document).ready(function () {
         $('#budget-form button[type="submit"]').text('Update Budget');
     });
 
-// Delete Budget
+    // Delete Budget
     $(document).on('click', '.delete-budget-btn', function () {
         const budgetId = $(this).data('id');
         if (confirm('Are you sure you want to delete this budget?')) {
@@ -265,13 +265,8 @@ $(document).ready(function () {
                 },
                 error: function () {
                     alert('Failed to delete budget.');
-                }   
+                }
             });
         }
     });
 });
-
-
-
-
-    
