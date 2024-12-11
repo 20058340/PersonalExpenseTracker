@@ -20,3 +20,12 @@ describe('Expense Tracker Application', () => {
         expect($('#categories-list').html()).toContain('Food');
         expect($('#categories-list').html()).toContain('Entertainment');
     });
+
+    // Test adding a new category
+    it('should add a new category', async () => {
+        $.ajax.mockImplementationOnce((options) => {
+            expect(options.method).toBe('POST');
+            expect(options.url).toBe('http://localhost:4000/categories');
+            expect(options.data).toEqual(JSON.stringify({ name: 'Transport' }));
+            options.success();
+        });
