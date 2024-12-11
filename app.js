@@ -6,6 +6,22 @@ fetchCategories();
 fetchExpenses();
 fetchBudgets();
 
+// Event Listeners
+$('#category-form').submit(function (e) {
+    e.preventDefault();
+    addCategory();
+});
+
+$('#expense-form').submit(function (e) {
+    e.preventDefault();
+    addOrUpdateExpense(); // Handles both adding and updating
+});
+
+$('#budget-form').submit(function (e) {
+    e.preventDefault();
+    setOrUpdateBudget(); // Handles both setting and updating
+});
+
 
 // Fetch Categories
 function fetchCategories() {
