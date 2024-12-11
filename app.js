@@ -7,20 +7,24 @@ function fetchCategories() {
     $.get(`${API_BASE_URL}/categories`, function (data) {
         $('#categories-list').empty();
         $('#expense-category, #budget-category').empty().append('<option value="">Select Category</option>');
-
-            expenseCategoryDropdown.innerHTML = "";
-            budgetCategoryDropdown.innerHTML = "";
-
+        if (data.categories.length === 0) {
+            $('#categories-list').append('<li>No categories available</li>');
+        } else {
             data.categories.forEach(category => {
-                const option = document.createElement("option");
-                option.value = category.id;
-                option.textContent = category.name;
-
-                expenseCategoryDropdown.appendChild(option.cloneNode(true));
-                budgetCategoryDropdown.appendChild(option);
+                $('#categories-list').append(`
+                    <li>
+                        ${category.name}
+                        <button class="delete-category-btn" data-id="${category.id}">Delete</button>
+                    </li>
+                `);
+                $('#expense-category').append(`<option value="${category.id}">${category.name}</option>`);
+                $('#budget-category').append(`<option value="${category.id}">${category.name}</option>`);
             });
-        })
-        .catch(error => console.error("Error loading categories:", error));
+        }
+    }).fail(function () {
+        alert('Failed to fetch categories');
+    });
+
 }
 
 // Add Expense - Handling Form Submission
