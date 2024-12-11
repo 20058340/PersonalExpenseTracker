@@ -186,3 +186,16 @@ function fetchBudgets() {
         alert('Failed to fetch budgets');
     });
 }
+
+// Set or Update Budget
+function setOrUpdateBudget() {
+    const budgetId = $('#budget-id').val(); // Hidden input for budget ID
+    const categoryId = $('#budget-category').val();
+    const limitAmount = $('#budget-limit').val();
+
+    if (!categoryId || !limitAmount) {
+        alert('Please fill in all fields.');
+        return;
+    }
+
+    
