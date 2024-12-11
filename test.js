@@ -13,3 +13,10 @@ describe('Expense Tracker Application', () => {
         $.get.mockImplementationOnce((url, callback) => {
             callback({ categories: [{ id: 1, name: 'Food' }, { id: 2, name: 'Entertainment' }] });
         });
+
+        // Call fetchCategories function
+        await app.fetchCategories();
+
+        expect($('#categories-list').html()).toContain('Food');
+        expect($('#categories-list').html()).toContain('Entertainment');
+    });
