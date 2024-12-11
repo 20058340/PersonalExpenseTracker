@@ -219,6 +219,17 @@ function setOrUpdateBudget() {
     });
 }
 
+// Edit Budget
+$(document).on('click', '.edit-budget-btn', function () {
+    const budgetId = $(this).data('id');
+    const categoryId = $(this).data('category-id');
+    const limitAmount = $(this).data('limit');
+    $('#budget-id').val(budgetId);
+    $('#budget-category').val(categoryId);
+    $('#budget-limit').val(limitAmount);
+    $('#budget-form button[type="submit"]').text('Update Budget');
+});
+
 
 
     
