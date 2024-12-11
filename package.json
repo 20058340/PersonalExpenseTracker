@@ -21,8 +21,6 @@
     "jquery": "^3.7.1",
     "jsdom": "^25.0.1"
   },
-  "description": "",
-  "jest": {
-    "testEnvironment": "jsdom"
-  }
+  "description": ""
+
 }
