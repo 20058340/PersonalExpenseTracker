@@ -29,3 +29,24 @@ describe('Expense Tracker Application', () => {
             expect(options.data).toEqual(JSON.stringify({ name: 'Transport' }));
             options.success();
         });
+
+        // Simulate adding a category
+        $('#category-name').val('Transport');
+        await app.addCategory();
+
+        expect($('#category-name').val()).toBe('');
+        expect($('#categories-list').html()).toContain('Transport');
+    });
+
+    // Test expense form validation
+    it('should not add an expense if required fields are empty', () => {
+        $('#expense-amount').val('');
+        $('#expense-date').val('');
+        $('#expense-category').val('');
+        $('#expense-description').val('');
+
+        app.addOrUpdateExpense();
+
+        // Ensure no call to API is made if fields are empty
+        expect($.ajax).not.toHaveBeenCalled();
+    });
