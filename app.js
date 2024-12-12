@@ -7,20 +7,21 @@ $(document).ready(function () {
     fetchBudgets();
 
     // Event Listeners
-    $('#category-form').submit(function (e) {
+    $('#category-form').on('submit', function (e) {
         e.preventDefault();
         addCategory();
-    });
-
-    $('#expense-form').submit(function (e) {
+      });
+      
+      $('#expense-form').on('submit', function (e) {
         e.preventDefault();
         addOrUpdateExpense(); // Handles both adding and updating
-    });
-
-    $('#budget-form').submit(function (e) {
+      });
+      
+      $('#budget-form').on('submit', function (e) {
         e.preventDefault();
         setOrUpdateBudget(); // Handles both setting and updating
-    });
+      });
+      
 
     // Loading Indicator functions
     function showLoadingIndicator() {
