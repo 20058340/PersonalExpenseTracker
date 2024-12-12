@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personal Expense Tracker</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file for styling -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div id="app">
@@ -34,6 +34,29 @@
             </ul>
         </div>
 
+        
+
+        <!-- Filter Section -->
+        <div id="filter-section">
+            <h2>Filter Expenses</h2>
+            <label for="categoryFilter">Category:</label>
+            <select id="categoryFilter" required>
+                <option value="" disabled selected>Select Category</option>
+                <!-- Categories will be populated dynamically -->
+            </select>
+
+            <label for="startDate">Start Date:</label>
+            <input type="date" id="startDate" />
+
+            <label for="endDate">End Date:</label>
+            <input type="date" id="endDate" />
+
+            <button id="applyFilters">Apply Filters</button>
+        </div>
+
+        
+        
+
         <!-- Expenses Section -->
         <div id="expenses-section">
             <h2>Expenses</h2>
@@ -44,7 +67,6 @@
                 <label for="expense-date">Date</label>
                 <input type="date" id="expense-date" required>
 
-                <!-- Expense Category Dropdown -->
                 <label for="expense-category">Category</label>
                 <select id="expense-category" required>
                     <option value="" disabled selected>Select Category</option>
@@ -56,7 +78,6 @@
                 <button type="submit">Add Expense</button>
             </form>
 
-            <!-- Expense Table -->
             <section id="expense-list">
                 <h2>Expenses Lists</h2>
                 <table>
@@ -70,10 +91,19 @@
                         </tr>
                     </thead>
                     <tbody id="expense-table-body">
-
                     </tbody>
                 </table>
             </section>
+        </div>
+
+        <!-- Chart Section -->
+        <div id="chart-section">
+            <h2>Expense Report</h2>
+            
+        </div>
+
+        <div id="chart-container">
+            <canvas id="expenseChart"></canvas>
         </div>
 
         <!-- Budget Section -->
@@ -90,13 +120,11 @@
                         </tr>
                     </thead>
                     <tbody id="budgets-table-body">
-
                     </tbody>
                 </table>
             </section>
 
             <form id="budget-form">
-                <!-- Budget Category Dropdown -->
                 <label for="budget-category">Category</label>
                 <select id="budget-category" required>
                     <option value="" disabled selected>Select Category</option>
@@ -110,8 +138,8 @@
         </div>
     </div>
 
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

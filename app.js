@@ -1,5 +1,6 @@
 $(document).ready(function () {
     const API_BASE_URL = 'http://localhost:4000';
+    let expenseChart;
 
     // Initial fetch
     fetchCategories();
@@ -24,6 +25,19 @@ $(document).ready(function () {
         console.log('Budget form submitted');
         setOrUpdateBudget(); 
       });
+
+    // Add event listener for category filter
+    $('#expense-category-filter').on('change', function () {
+        const selectedCategory = $(this).val();
+        console.log('Selected Category:', selectedCategory);  // Debugging log
+        fetchExpenses(selectedCategory);  // Call fetchExpenses with the selected category
+    });
+
+
+
+    $('#expense-date-filter').on('change', function () {
+        fetchExpenses(); // Re-fetch expenses with the selected filter
+    });
       
 
     // Loading Indicator functions
@@ -41,11 +55,13 @@ $(document).ready(function () {
         $.get(`${API_BASE_URL}/categories`, function (data) {
             $('#categories-list').empty();
             $('#expense-category, #budget-category').empty().append('<option value="">Select Category</option>');
+            $('#expense-category-filter').empty().append('<option value="">All Categories</option>');
 
             if (data.categories.length === 0) {
                 $('#categories-list').append('<li>No categories available</li>');
             } else {
                 data.categories.forEach(category => {
+                    console.log('Category:', category);
                     $('#categories-list').append(`
                         <li>
                             ${category.name}
@@ -54,6 +70,7 @@ $(document).ready(function () {
                     `);
                     $('#expense-category').append(`<option value="${category.id}">${category.name}</option>`);
                     $('#budget-category').append(`<option value="${category.id}">${category.name}</option>`);
+                    $('#categoryFilter').append(`<option value="${category.id}">${category.name}</option>`);
                 });
             }
             hideLoadingIndicator();
@@ -112,6 +129,9 @@ $(document).ready(function () {
     // Fetch Expenses
     function fetchExpenses() {
         showLoadingIndicator();
+        
+
+        
         $.get(`${API_BASE_URL}/expenses`, function (data) {
             $('#expense-table-body').empty();
 
@@ -132,6 +152,54 @@ $(document).ready(function () {
                         </tr>
                     `);
                 });
+                // Generate Expense Chart
+                const categoryExpenses = data.expenses.reduce((acc, expense) => {
+                    const categoryName = expense.category_name;
+                    if (!acc[categoryName]) {
+                        acc[categoryName] = 0;
+                    }
+                    acc[categoryName] += expense.amount;
+                    return acc;
+                }, {});
+
+                const chartLabels = Object.keys(categoryExpenses);
+                const chartData = Object.values(categoryExpenses);
+
+                if (expenseChart) {
+                    expenseChart.destroy();
+                }
+                const ctx = $('#expenseChart')[0].getContext('2d');
+
+                expenseChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: chartLabels,
+                        datasets: [{
+                            data: chartData,
+                            backgroundColor: ['#FF5733', '#33FF57', '#3357FF', '#FF33F5', '#FFBF33'],
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function (context) {
+                                        return `${context.label}: $${context.raw}`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+                $('#expenseChart').attr('width', 400).attr('height', 400); 
+            
+
             }
             hideLoadingIndicator();
         }).fail(function () {
@@ -139,6 +207,8 @@ $(document).ready(function () {
             hideLoadingIndicator();
         });
     }
+
+    
 
     // Add or Update Expense
     function addOrUpdateExpense() {

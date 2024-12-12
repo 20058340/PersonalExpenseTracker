@@ -3,6 +3,7 @@ const sqlite3 = require('sqlite3').verbose();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
+
 const app = express();
 const PORT = 4000;
 
@@ -124,6 +125,23 @@ app.get('/expenses', (req, res) => {
         res.json({ expenses: rows });
     });
 });
+/*app.get('/expenses', (req, res) => {
+    const { category_id } = req.query;
+    let query = 'SELECT * FROM expenses';  // Base query
+
+    if (category_id) {
+        query += ` WHERE category_id = ${category_id}`;  // Filter by category if category_id is provided
+    }
+
+    db.query(query, (err, results) => {
+        if (err) {
+            res.status(500).send('Error fetching expenses');
+            return;
+        }
+        res.json({ expenses: results });
+    });
+});*/
+
 
 // Get a single expense by ID
 app.get('/expenses/:id', (req, res) => {
