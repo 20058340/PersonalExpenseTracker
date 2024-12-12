@@ -30,7 +30,7 @@ const db = new sqlite3.Database('./expense_tracker.db', (err) => {
 });
 
 const corsOptions = {
-    origin: 'http://127.0.0.1:5500',  // Allow only this origin
+    origin: ['http://127.0.0.1:5500', 'https://20058340.github.io/PersonalExpenseTracker/'],  // Allow only this origin
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type']
 };
