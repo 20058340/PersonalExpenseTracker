@@ -6,12 +6,14 @@ const bodyParser = require('body-parser');
 const app = express();
 const PORT = 4000;
 
-// Fixing cors origin resource
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*"); 
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-  });
+app.use((req, res, next) => { 
+    const allowedOrigins = ['http://127.0.0.1:5500', 'https://20058340.github.io']; 
+    const origin = req.headers.origin; 
+    if (allowedOrigins.includes(origin)) { 
+        res.header('Access-Control-Allow-Origin', origin); 
+    } 
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept'); 
+    next(); });
 
 // Middleware
 app.use(bodyParser.json());
