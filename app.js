@@ -16,13 +16,13 @@ $(document).ready(function () {
       $('#expense-form').on('submit', function (e) {
         e.preventDefault();
         console.log('Expense form submitted');
-        addOrUpdateExpense(); // Handles both adding and updating
+        addOrUpdateExpense(); 
       });
       
       $('#budget-form').on('submit', function (e) {
         e.preventDefault();
         console.log('Budget form submitted');
-        setOrUpdateBudget(); // Handles both setting and updating
+        setOrUpdateBudget(); 
       });
       
 
@@ -142,7 +142,7 @@ $(document).ready(function () {
 
     // Add or Update Expense
     function addOrUpdateExpense() {
-        const expenseId = $('#expense-id').val(); // Hidden input for expense ID
+        const expenseId = $('#expense-id').val(); 
         const amount = $('#expense-amount').val();
         const date = $('#expense-date').val();
         const categoryId = $('#expense-category').val();
@@ -154,7 +154,7 @@ $(document).ready(function () {
             return;
         }
 
-        // Validate date format (example: YYYY-MM-DD)
+        
         if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
             alert('Please enter a valid date in the format YYYY-MM-DD.');
             return;
@@ -248,7 +248,7 @@ $(document).ready(function () {
 
     // Set or Update Budget
     function setOrUpdateBudget() {
-        const budgetId = $('#budget-id').val(); // Hidden input for budget ID
+        const budgetId = $('#budget-id').val(); 
         const categoryId = $('#budget-category').val();
         const limitAmount = $('#budget-limit').val();
 
