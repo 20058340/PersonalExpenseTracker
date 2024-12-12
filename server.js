@@ -10,6 +10,13 @@ const PORT = 4000;
 app.use(bodyParser.json());
 app.use(cors());
 
+// Fixing cors origin resource
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*"); 
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
+
 // Connect to SQLite database
 const db = new sqlite3.Database('./expense_tracker.db', (err) => {
     if (err) {
