@@ -4,7 +4,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "test": "jest"
+    "test": "jest",
+    "build": "echo 'No build step required for Express app'",
+    "azure-static-web-apps": "npm run build"
   },
   "keywords": [],
   "author": "",
