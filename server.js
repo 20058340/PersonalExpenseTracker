@@ -10,7 +10,7 @@ const PORT = 4000;
 app.use(bodyParser.json());
 app.use(cors());
 
-const allowedOrigins = ['http://127.0.0.1:5500', 'https://20058340.github.io']; 
+const allowedOrigins = ['http://127.0.0.1:5500', 'https://20058340.github.io/PersonalExpenseTracker/']; 
 
 const corsoptions = { 
     origin: function (origin, callback) { 
