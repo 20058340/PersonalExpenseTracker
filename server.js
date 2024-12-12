@@ -10,16 +10,20 @@ const PORT = 4000;
 app.use(bodyParser.json());
 app.use(cors());
 
-// Fixing cors origin resource
-app.use((req, res, next) => { 
-    const allowedOrigins = ['http://127.0.0.1:5500', 'https://20058340.github.io/PersonalExpenseTracker/']; 
-    const origin = req.headers.origin; 
-    if (allowedOrigins.includes(origin)) { 
-        res.header('Access-Control-Allow-Origin', origin); 
-    } 
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept'); 
-    next(); });
+const allowedOrigins = ['http://127.0.0.1:5500', 'https://20058340.github.io']; 
 
+const corsoptions = { 
+    origin: function (origin, callback) { 
+        if (allowedOrigins.includes(origin) || !origin) { 
+            callback(null, true);
+        } 
+        else { 
+            callback(new Error('Not allowed by CORS')); 
+        } 
+    }, 
+    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'] 
+}; 
+app.use(cors(corsOptions));
 // Connect to SQLite database
 const db = new sqlite3.Database('./expense_tracker.db', (err) => {
     if (err) {
