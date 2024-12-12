@@ -9,16 +9,19 @@ $(document).ready(function () {
     // Event Listeners
     $('#category-form').on('submit', function (e) {
         e.preventDefault();
+        console.log('Category form submitted');
         addCategory();
       });
       
       $('#expense-form').on('submit', function (e) {
         e.preventDefault();
+        console.log('Expense form submitted');
         addOrUpdateExpense(); // Handles both adding and updating
       });
       
       $('#budget-form').on('submit', function (e) {
         e.preventDefault();
+        console.log('Budget form submitted');
         setOrUpdateBudget(); // Handles both setting and updating
       });
       
